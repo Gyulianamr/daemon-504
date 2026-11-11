@@ -1,0 +1,262 @@
+[
+  {
+    "id": 1,
+    "nombre": "Flamix",
+    "tipo": "Fuego",
+    "rol": "inicial",
+    "base": {
+      "hp": 42,
+      "ataque": 14,
+      "defensa": 9
+    },
+    "facilidadCaptura": 0.4,
+    "descripcion": "Una llama inquieta que nunca se apaga. Leal con quien la cuida."
+  },
+  {
+    "id": 2,
+    "nombre": "Aquabit",
+    "tipo": "Agua",
+    "rol": "inicial",
+    "base": {
+      "hp": 46,
+      "ataque": 12,
+      "defensa": 11
+    },
+    "facilidadCaptura": 0.4,
+    "descripcion": "Guarda en su caparazón el agua más limpia del valle."
+  },
+  {
+    "id": 3,
+    "nombre": "Terrox",
+    "tipo": "Planta",
+    "rol": "inicial",
+    "base": {
+      "hp": 48,
+      "ataque": 12,
+      "defensa": 10
+    },
+    "facilidadCaptura": 0.4,
+    "descripcion": "Nace de la tierra donde un santuario aún resiste."
+  },
+  {
+    "id": 4,
+    "nombre": "Voltix",
+    "tipo": "Eléctrico",
+    "rol": "salvaje",
+    "base": {
+      "hp": 38,
+      "ataque": 13,
+      "defensa": 8
+    },
+    "facilidadCaptura": 0.6,
+    "descripcion": "Corre entre las rocas dejando chispas a su paso."
+  },
+  {
+    "id": 5,
+    "nombre": "Sombrix",
+    "tipo": "Sombra",
+    "rol": "salvaje",
+    "base": {
+      "hp": 36,
+      "ataque": 14,
+      "defensa": 8
+    },
+    "facilidadCaptura": 0.5,
+    "descripcion": "Una niebla con ojos que aparece en los lugares oscuros."
+  },
+  {
+    "id": 6,
+    "nombre": "Rocaz",
+    "tipo": "Roca",
+    "rol": "salvaje",
+    "base": {
+      "hp": 50,
+      "ataque": 11,
+      "defensa": 14
+    },
+    "facilidadCaptura": 0.5,
+    "descripcion": "Duro como una piedra; rueda cuesta abajo cuando hay tormenta."
+  },
+  {
+    "id": 7,
+    "nombre": "Brizna",
+    "tipo": "Planta",
+    "rol": "salvaje",
+    "base": {
+      "hp": 40,
+      "ataque": 10,
+      "defensa": 10
+    },
+    "facilidadCaptura": 0.8,
+    "descripcion": "Se esconde entre la hierba alta y solo se mueve de noche."
+  },
+  {
+    "id": 8,
+    "nombre": "Charquito",
+    "tipo": "Agua",
+    "rol": "salvaje",
+    "base": {
+      "hp": 40,
+      "ataque": 11,
+      "defensa": 9
+    },
+    "facilidadCaptura": 0.8,
+    "descripcion": "Salta de charco en charco más rápido de lo que parece."
+  },
+  {
+    "id": 9,
+    "nombre": "Ascuín",
+    "tipo": "Fuego",
+    "rol": "salvaje",
+    "base": {
+      "hp": 44,
+      "ataque": 15,
+      "defensa": 10
+    },
+    "facilidadCaptura": 0.5,
+    "descripcion": "Su crin arde más fuerte cuanto más alto sube."
+  },
+  {
+    "id": 10,
+    "nombre": "Zumbix",
+    "tipo": "Eléctrico",
+    "rol": "salvaje",
+    "base": {
+      "hp": 42,
+      "ataque": 14,
+      "defensa": 9
+    },
+    "facilidadCaptura": 0.5,
+    "descripcion": "Zumba sin parar y deja el aire cargado de estática."
+  },
+  {
+    "id": 11,
+    "nombre": "Cortezón",
+    "tipo": "Roca",
+    "rol": "salvaje",
+    "base": {
+      "hp": 56,
+      "ataque": 13,
+      "defensa": 16
+    },
+    "facilidadCaptura": 0.4,
+    "descripcion": "Finge ser un árbol para que nadie lo moleste."
+  },
+  {
+    "id": 12,
+    "nombre": "Musguito",
+    "tipo": "Planta",
+    "rol": "salvaje",
+    "base": {
+      "hp": 44,
+      "ataque": 12,
+      "defensa": 12
+    },
+    "facilidadCaptura": 0.6,
+    "descripcion": "Cubierto de musgo; protege los caminos del bosque."
+  },
+  {
+    "id": 13,
+    "nombre": "Glitchón",
+    "tipo": "Eléctrico",
+    "rol": "salvaje",
+    "base": {
+      "hp": 46,
+      "ataque": 15,
+      "defensa": 11
+    },
+    "facilidadCaptura": 0.4,
+    "descripcion": "Se mete en los aparatos y los hace fallar."
+  },
+  {
+    "id": 14,
+    "nombre": "Cuervonoche",
+    "tipo": "Sombra",
+    "rol": "salvaje",
+    "base": {
+      "hp": 48,
+      "ataque": 16,
+      "defensa": 10
+    },
+    "facilidadCaptura": 0.4,
+    "descripcion": "Colecciona objetos brillantes que roba a los viajeros."
+  },
+  {
+    "id": 15,
+    "nombre": "Murciebyte",
+    "tipo": "Sombra",
+    "rol": "salvaje",
+    "base": {
+      "hp": 44,
+      "ataque": 15,
+      "defensa": 10
+    },
+    "facilidadCaptura": 0.5,
+    "descripcion": "Se orienta en la oscuridad con chillidos que nadie escucha."
+  },
+  {
+    "id": 16,
+    "nombre": "Magmacor",
+    "tipo": "Fuego",
+    "rol": "salvaje",
+    "base": {
+      "hp": 52,
+      "ataque": 17,
+      "defensa": 13
+    },
+    "facilidadCaptura": 0.3,
+    "descripcion": "Su cuerpo es roca fundida; deja el suelo caliente."
+  },
+  {
+    "id": 17,
+    "nombre": "Roblevigía",
+    "tipo": "Planta",
+    "rol": "guardián",
+    "base": {
+      "hp": 70,
+      "ataque": 15,
+      "defensa": 13
+    },
+    "facilidadCaptura": 0,
+    "descripcion": "Guardián de la Pradera. Su sello se quebró y ahora ataca a quien se acerca."
+  },
+  {
+    "id": 18,
+    "nombre": "Centinela de Roble",
+    "tipo": "Roca",
+    "rol": "guardián",
+    "base": {
+      "hp": 80,
+      "ataque": 16,
+      "defensa": 17
+    },
+    "facilidadCaptura": 0,
+    "descripcion": "Guardián del Bosque. Bloquea el paso hacia la montaña."
+  },
+  {
+    "id": 19,
+    "nombre": "Tempestrón",
+    "tipo": "Eléctrico",
+    "rol": "guardián",
+    "base": {
+      "hp": 85,
+      "ataque": 18,
+      "defensa": 15
+    },
+    "facilidadCaptura": 0,
+    "descripcion": "Guardián de la Tormenta. Lanza rayos sin control desde la cima."
+  },
+  {
+    "id": 20,
+    "nombre": "Umbráculo",
+    "tipo": "Sombra",
+    "rol": "guardián",
+    "base": {
+      "hp": 90,
+      "ataque": 20,
+      "defensa": 16
+    },
+    "facilidadCaptura": 0,
+    "descripcion": "Guardián Oscuro. Apagó todas las luces de la ciudad."
+  }
+]

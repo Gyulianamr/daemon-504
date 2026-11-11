@@ -1,0 +1,25 @@
+{
+  "fuerteContra": {
+    "Fuego": [
+      "Planta"
+    ],
+    "Agua": [
+      "Fuego",
+      "Roca"
+    ],
+    "Planta": [
+      "Agua",
+      "Roca"
+    ],
+    "Eléctrico": [
+      "Agua"
+    ],
+    "Roca": [
+      "Fuego",
+      "Eléctrico"
+    ],
+    "Sombra": [
+      "Eléctrico"
+    ]
+  }
+}
