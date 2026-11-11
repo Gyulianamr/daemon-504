@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "nombre": "TamaBall",
+    "tipo": "captura",
+    "valor": 1.0,
+    "precio": 100,
+    "pesoHallazgo": 40,
+    "descripcion": "Esfera básica para capturar criaturas."
+  },
+  {
+    "id": 2,
+    "nombre": "MegaBall",
+    "tipo": "captura",
+    "valor": 1.5,
+    "precio": 250,
+    "pesoHallazgo": 20,
+    "descripcion": "Esfera reforzada: aumenta la probabilidad de captura."
+  },
+  {
+    "id": 3,
+    "nombre": "Curaball",
+    "tipo": "curacion",
+    "valor": 20,
+    "precio": 60,
+    "pesoHallazgo": 40,
+    "descripcion": "Recupera 20 puntos de vida de una criatura."
+  }
+]
