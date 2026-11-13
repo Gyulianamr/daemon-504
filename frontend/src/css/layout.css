@@ -1,0 +1,189 @@
+/* ═══════════════════════════════════════════════════════════════════
+ * ESTA PARTE LA INTEGRA: Jenifer Padilla
+ * Tarea A2-05 · Rama: feature/a2-mundo · Fecha límite: viernes 13 de noviembre
+ * Commit: "feat(layout): estructura común de las pantallas internas"
+ * ═══════════════════════════════════════════════════════════════════ */
+
+
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout__contenido {
+  flex: 1;
+  width: 100%;
+  max-width: var(--ancho-max);
+  margin: 0 auto;
+  padding: var(--espacio-2);
+  padding-bottom: calc(var(--espacio-4) + 56px); 
+}
+
+.layout__pie {
+  padding: var(--espacio-2);
+  text-align: center;
+}
+
+
+.barra-superior {
+  background: var(--color-principal);
+  color: var(--color-tarjeta);
+}
+
+.barra-superior__contenido {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-1);
+  max-width: var(--ancho-max);
+  margin: 0 auto;
+  padding: var(--espacio-1) var(--espacio-2);
+}
+
+.barra-superior__titulo {
+  font-size: var(--texto-md);
+  font-weight: 700;
+}
+
+.barra-superior__datos {
+  order: 3;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px var(--espacio-2);
+  margin: 0;
+}
+
+.barra-superior__dato {
+  display: flex;
+  gap: 6px;
+  font-size: var(--texto-xs);
+}
+
+.barra-superior__dato dt {
+  opacity: 0.75;
+}
+
+.barra-superior__dato dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+
+.menu {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  background: var(--color-tarjeta);
+  border-top: 1px solid var(--color-borde);
+}
+
+.menu__lista {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menu__enlace {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 4px;
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  color: var(--color-texto-suave);
+}
+
+.menu__enlace--activo {
+  color: var(--color-principal);
+  background: var(--color-suave);
+  box-shadow: inset 0 3px 0 var(--color-principal);
+}
+
+
+.destinos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.destinos__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+  padding: var(--espacio-1) var(--espacio-2);
+  background: var(--color-tarjeta);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+}
+
+.destinos__item--bloqueado {
+  background: var(--color-suave);
+}
+
+.destinos__nombre {
+  font-weight: 600;
+  color: var(--color-principal);
+}
+
+.destinos__requisito {
+  font-size: var(--texto-xs);
+  color: var(--color-aviso);
+}
+
+
+@media (min-width: 768px) {
+  .layout__contenido {
+    padding: var(--espacio-3);
+  }
+
+  .barra-superior__datos {
+    order: 0;
+    width: auto;
+    display: flex;
+    gap: var(--espacio-3);
+  }
+
+  .menu {
+    position: static;
+    border-top: 0;
+    border-bottom: 1px solid var(--color-borde);
+  }
+
+  .menu__lista {
+    display: flex;
+    max-width: var(--ancho-max);
+    margin: 0 auto;
+    padding: 0 var(--espacio-2);
+    gap: var(--espacio-1);
+  }
+
+  .menu__enlace {
+    min-height: 44px;
+    padding: 0 var(--espacio-2);
+    font-size: var(--texto-sm);
+    box-shadow: none;
+  }
+
+  .menu__enlace--activo {
+    background: transparent;
+    box-shadow: inset 0 -3px 0 var(--color-principal);
+  }
+
+  .layout__contenido {
+    padding-bottom: var(--espacio-3);
+  }
+}
