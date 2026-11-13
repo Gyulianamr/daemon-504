@@ -1,0 +1,43 @@
+.acceso {
+  width: 100%;
+}
+
+.acceso__pestanas {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--espacio-1);
+}
+
+.acceso__pestana {
+  padding: var(--espacio-1);
+  border: solid var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-tarjeta);
+  color: var(--color-texto-suave);
+  cursor: pointer;
+}
+
+.acceso__pestana--activa {
+  border-color: var(--color-principal);
+  background: var(--color-suave);
+  color: var(--color-principal);
+  font-weight: 600;
+}
+
+.acceso__formulario,
+.acceso__cuenta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.acceso__cuenta {
+  padding-top: var(--espacio-2);
+  border-top: solid var(--color-borde);
+  font-size: var(--texto-sm);
+}
+
+.acceso__cuenta h2 {
+  color: var(--color-principal);
+  font-size: var(--texto-md);
+}
