@@ -244,3 +244,61 @@
     padding: var(--espacio-2);
   }
 }
+
+/* TARJETA DE CRIATURA · A2-06 */
+.tarjeta-criatura {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  padding: var(--espacio-2);
+  background: var(--color-tarjeta);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.tarjeta-criatura--activa {
+  border: 2px solid var(--color-principal);
+}
+
+.tarjeta-criatura--debilitada {
+  opacity: 0.65;
+}
+
+.tarjeta-criatura__encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--espacio-1);
+}
+
+.tarjeta-criatura__nombre {
+  color: var(--color-principal);
+  font-size: var(--texto-lg);
+}
+
+.tarjeta-criatura__tipo {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.tarjeta-criatura__nivel {
+  color: var(--color-secundario);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.tarjeta-criatura__estadisticas {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--espacio-2);
+  font-size: var(--texto-sm);
+}
+
+.tarjeta-criatura__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-1);
+}
