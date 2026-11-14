@@ -1,8 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA TIENE QUE INTEGRAR: Heysser Machado
- * Tarea A2-09 · Rama: feature/a2-tienda · Fecha límite: sábado 14 de noviembre
- * Commit: "feat(tienda): comprar objetos y curar en el santuario"
- * ═══════════════════════════════════════════════════════════════════ */
 // Tienda y santuario de las localidades. El precio SIEMPRE se lee del catálogo (objetos.json),
 // nunca de lo que envíe la pantalla.
 import { conPartida, fallar } from '../partida.js';

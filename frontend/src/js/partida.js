@@ -1,8 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA TIENE QUE INTEGRAR: Genesis Medina
- * Tarea A2-01 · Rama: feature/a2-base · Fecha límite: miércoles 11 de noviembre
- * Commit: "feat(datos): guardar la partida y responder como la API"
- * ═══════════════════════════════════════════════════════════════════ */
 // Guarda la partida en el navegador (localStorage) mientras no exista el Back-End.
 // Todos los servicios de js/servicios/ usan conPartida(): así responden y fallan
 // igual que lo hará la API, y en el Avance 4 solo se cambia el interior de cada servicio por fetch().

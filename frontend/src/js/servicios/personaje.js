@@ -1,8 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA TIENE QUE INTEGRAR: Genesis Medina
- * Tarea A2-08 · Rama: feature/a2-personaje · Fecha límite: sábado 14 de noviembre
- * Commit: "feat(personaje): crear personaje con criatura inicial"
- * ═══════════════════════════════════════════════════════════════════ */
 // Crea la partida de un usuario nuevo: 300 bytes, 5 TamaBall, 3 Curaball y la criatura inicial elegida en Nv 5.
 // Futuro endpoint: POST /api/personaje
 import { conEstado, fallar, resumenPersonaje } from '../partida.js';

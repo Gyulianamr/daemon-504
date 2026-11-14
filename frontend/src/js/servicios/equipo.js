@@ -1,9 +1,3 @@
-
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA TIENE QUE INTEGRAR: Jatniel Oliva
- * Tarea A2-06 · Rama: feature/a2-equipo · Fecha límite: viernes 13 de noviembre
- * Commit: "feat(equipo): administrar equipo activo y reserva"
- * ═══════════════════════════════════════════════════════════════════ */
 // Equipo del jugador: máximo 6 criaturas activas.
 // Las demás quedan en reserva (posición null).
 import { conPartida, fallar } from '../partida.js';

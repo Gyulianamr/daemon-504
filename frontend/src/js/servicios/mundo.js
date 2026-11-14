@@ -1,9 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA INTEGRA: Jenifer Padilla
- * Tarea A2-05 · Rama: feature/a2-mundo · Fecha límite: viernes 13 de noviembre
- * Commit: "feat(mundo): zona actual, destinos y movimiento"
- * ═══════════════════════════════════════════════════════════════════ */
-
 import { conPartida, fallar } from '../partida.js';
 import { buscarCriatura, buscarZona, guardianes } from '../datos.js';
 import { registrar } from './historial.js';
