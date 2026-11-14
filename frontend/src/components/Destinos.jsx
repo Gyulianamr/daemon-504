@@ -1,9 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA INTEGRA: Jenifer Padilla
- * Tarea A2-05 · Rama: feature/a2-mundo · Fecha límite: viernes 13 de noviembre
- * Commit: "feat(mundo): lista de destinos conectados"
- * ═══════════════════════════════════════════════════════════════════ */
-
 import Boton from './Boton.jsx';
 import '../css/layout.css';
 

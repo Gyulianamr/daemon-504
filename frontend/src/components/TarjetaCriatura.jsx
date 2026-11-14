@@ -1,9 +1,3 @@
-
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA TIENE QUE INTEGRAR: Jatniel Oliva
- * Tarea A2-06 · Rama: feature/a2-equipo · Fecha límite: viernes 13 de noviembre
- * Commit: "feat(equipo): tarjeta de criatura"
- * ═══════════════════════════════════════════════════════════════════ */
 import BarraVida from './BarraVida.jsx';
 
 export default function TarjetaCriatura({

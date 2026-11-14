@@ -1,8 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA TIENE QUE INTEGRAR: Genesis Medina
- * Tarea A2-01 · Rama: feature/a2-base · Fecha límite: miércoles 11 de noviembre
- * Commit: "feat(base): hook useCargar para pedir datos con estado de carga"
- * ═══════════════════════════════════════════════════════════════════ */
 import { useCallback, useEffect, useState } from 'react';
 
 // Pide datos a un servicio y devuelve { datos, cargando, error, recargar, setDatos }.

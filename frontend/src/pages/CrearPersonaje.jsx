@@ -1,8 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA TIENE QUE INTEGRAR: Genesis Medina
- * Tarea A2-08 · Rama: feature/a2-personaje · Fecha límite: sábado 14 de noviembre
- * Commit: "feat(personaje): pantalla para crear personaje"
- * ═══════════════════════════════════════════════════════════════════ */
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { crearPersonaje, INICIALES } from '../js/servicios/personaje.js';

@@ -1,8 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA TIENE QUE INTEGRAR: Genesis Medina
- * Tarea A2-01 · Rama: feature/a2-base · Fecha límite: miércoles 11 de noviembre
- * Commit: "feat(base): rutas de la aplicación con páginas en construcción"
- * ═══════════════════════════════════════════════════════════════════ */
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';

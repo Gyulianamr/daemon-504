@@ -1,8 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA TIENE QUE INTEGRAR: Genesis Medina
- * Tarea A2-01 · Rama: feature/a2-base · Fecha límite: miércoles 11 de noviembre
- * Commit: "feat(datos): cargar los datos del juego desde JSON"
- * ═══════════════════════════════════════════════════════════════════ */
 // Carga los datos fijos del juego (criaturas, zonas, objetos, tipos y eventos) desde public/data/*.json.
 // Se usa fetch, igual que cuando más adelante pidamos datos a la API.
 

@@ -1,9 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA INTEGRA: Jenifer Padilla
- * Tarea A2-05 · Rama: feature/a2-mundo · Fecha límite: viernes 13 de noviembre
- * Commit: "feat(layout): estructura común de las pantallas internas"
- * ═══════════════════════════════════════════════════════════════════ */
-
 import { Outlet } from 'react-router-dom';
 import BarraSuperior from './BarraSuperior.jsx';
 import Menu from './Menu.jsx';

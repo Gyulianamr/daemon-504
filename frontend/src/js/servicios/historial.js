@@ -1,8 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA TIENE QUE INTEGRAR: Genesis Medina
- * Tarea A2-01 · Rama: feature/a2-base · Fecha límite: miércoles 11 de noviembre
- * Commit: "feat(historial): registrar y consultar el historial"
- * ═══════════════════════════════════════════════════════════════════ */
 // registrar() lo usan todos los servicios para anotar lo que pasa; listarHistorial() lo usa la pantalla Historial.
 import { conPartida } from '../partida.js';
 

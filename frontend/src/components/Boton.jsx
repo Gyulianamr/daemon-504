@@ -1,10 +1,3 @@
-
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA TIENE QUE INTEGRAR: Jatniel Oliva
- * Tarea A2-02 · Rama: feature/a2-componentes
- * Commit: "feat(componentes): botón reutilizable"
- * ═══════════════════════════════════════════════════════════════════ */
-
 // Botón reutilizable para las acciones del juego.
 export default function Boton({
   variante = 'principal',
