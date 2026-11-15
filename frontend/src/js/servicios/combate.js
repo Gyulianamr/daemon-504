@@ -151,7 +151,7 @@ export function turnoDelRival(datos, partida, mensajes) {
   return null;
 }
 
-function terminar(datos, partida, resultado, mensajes) {
+export function terminar(datos, partida, resultado, mensajes) {
   const encuentro = partida.encuentro;
 
   if (resultado === 'victoria') {
