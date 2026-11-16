@@ -1,0 +1,37 @@
+
+/* ═══════════════════════════════════════════════════════════════════
+ * ESTA PARTE LA TIENE QUE INTEGRAR: Jatniel Oliva
+ * Tarea A2-14 · Rama: feature/a2-pantallas-equipo · Fecha límite: lunes 16 de noviembre
+ * Commit: "feat(inventario): pantalla de inventario"
+ * ═══════════════════════════════════════════════════════════════════ */
+
+.inventario {
+  display: grid;
+  gap: var(--espacio-2);
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .inventario {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.inventario__fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--espacio-1);
+}
+
+.inventario__nombre {
+  font-size: var(--texto-md);
+  margin-bottom: 4px;
+}
+
+.inventario__cantidad {
+  font-size: var(--texto-lg);
+  font-weight: 700;
+  color: var(--color-principal);
+}
