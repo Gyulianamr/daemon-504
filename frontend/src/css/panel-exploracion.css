@@ -1,0 +1,47 @@
+/* Resultado con borde segun el tipo y lista de ultimos resultados. */
+
+.panel-exploracion__resultado {
+  padding: var(--espacio-2);
+  background: var(--color-suave);
+  border-left: 6px solid var(--color-texto-suave);
+  border-radius: var(--radio);
+}
+
+.panel-exploracion__resultado--criatura {
+  border-left-color: var(--color-secundario);
+}
+
+.panel-exploracion__resultado--objeto {
+  border-left-color: var(--color-exito);
+}
+
+.panel-exploracion__resultado--evento {
+  border-left-color: var(--color-aviso);
+}
+
+.panel-exploracion__texto {
+  margin: 0 0 var(--espacio-1);
+  font-size: var(--texto-md);
+}
+
+.panel-exploracion__titulo {
+  margin: 0;
+  font-size: var(--texto-md);
+  color: var(--color-secundario);
+}
+
+.panel-exploracion__historial {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.panel-exploracion__item {
+  padding: var(--espacio-1) 0;
+  border-bottom: 1px solid var(--color-borde);
+  font-size: var(--texto-sm);
+}
+
+.panel-exploracion__item:last-child {
+  border-bottom: none;
+}
