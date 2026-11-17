@@ -13,7 +13,9 @@ export default function AccionesCaptura({
   alCapturar,
   deshabilitado = false,
 }) {
-  if (esferas.length === 0) {
+  const hayEsferas = esferas.some((esfera) => esfera.cantidad > 0);
+
+  if (!hayEsferas) {
     return (
       <Mensaje tipo="info">
         No tienes esferas de captura disponibles.
