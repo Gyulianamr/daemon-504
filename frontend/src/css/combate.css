@@ -1,0 +1,124 @@
+.combate__sin-combate {
+  max-width: var(--ancho-max);
+  margin: 0 auto;
+}
+
+.combate__sin-combate .tarjeta__contenido {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-2);
+}
+
+.combate__rivales {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio-2);
+}
+
+.combate__lado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.combate__etiqueta {
+  color: var(--color-principal);
+  font-size: var(--texto-lg);
+}
+
+.combate__recursos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espacio-2);
+  padding: var(--espacio-2);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-tarjeta);
+}
+
+.combate__recursos strong {
+  color: var(--color-principal);
+  font-size: var(--texto-lg);
+}
+
+.combate__acciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.combate__nota {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.combate__captura {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.combate__registro,
+.combate__resultado {
+  padding: var(--espacio-2);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-tarjeta);
+  box-shadow: var(--sombra);
+}
+
+.combate__lista {
+  margin: var(--espacio-1) 0 0;
+  padding-left: var(--espacio-3);
+}
+
+.combate__mensaje {
+  padding: var(--espacio-1) 0;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.combate__mensaje:last-child {
+  border-bottom: 0;
+}
+
+.combate__resultado {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-2);
+  color: var(--color-texto);
+}
+
+.combate__resultado--victoria,
+.combate__resultado--captura {
+  border-color: var(--color-exito);
+}
+
+.combate__resultado--victoria h2,
+.combate__resultado--captura h2 {
+  color: var(--color-exito);
+}
+
+.combate__resultado--derrota {
+  border-color: var(--color-error);
+}
+
+.combate__resultado--derrota h2 {
+  color: var(--color-error);
+}
+
+.combate__resultado--huida {
+  border-color: var(--color-aviso);
+}
+
+.combate__resultado--huida h2 {
+  color: var(--color-aviso);
+}
+
+@media (min-width: 768px) {
+  .combate__rivales {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
