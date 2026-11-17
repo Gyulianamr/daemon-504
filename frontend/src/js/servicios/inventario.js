@@ -1,9 +1,3 @@
-
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA TIENE QUE INTEGRAR: Jatniel Oliva
- * Tarea A2-11 · Rama: feature/a2-captura · Fecha límite: domingo 15 de noviembre
- * Commit: "feat(inventario): consultar y usar objetos"
- * ═══════════════════════════════════════════════════════════════════ */
 // Inventario: consulta cantidades y permite usar objetos de curación.
 import { conPartida, fallar } from '../partida.js';
 import { buscarObjeto } from '../datos.js';

@@ -1,10 +1,3 @@
-
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA TIENE QUE INTEGRAR: Jatniel Oliva
- * Tarea A2-11 · Rama: feature/a2-captura
- * Commit: "feat(captura): botones de captura por tipo de esfera"
- * ═══════════════════════════════════════════════════════════════════ */
-
 import Boton from './Boton.jsx';
 import Mensaje from './Mensaje.jsx';
 
