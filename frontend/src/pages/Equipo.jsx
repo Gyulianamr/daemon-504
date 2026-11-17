@@ -1,10 +1,3 @@
-
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA TIENE QUE INTEGRAR: Jatniel Oliva
- * Tarea A2-14 · Rama: feature/a2-pantallas-equipo · Fecha límite: lunes 16 de noviembre
- * Commit: "feat(equipo): pantalla de equipo y reserva"
- * ═══════════════════════════════════════════════════════════════════ */
-
 import { useState } from 'react';
 import {
   listarEquipo,

@@ -1,9 +1,3 @@
-
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA TIENE QUE INTEGRAR: Jatniel Oliva
- * Tarea A2-11 · Rama: feature/a2-captura · Fecha límite: domingo 15 de noviembre
- * Commit: "feat(captura): intento de captura con esferas"
- * ═══════════════════════════════════════════════════════════════════ */
 // Captura. probabilidad = ((1 − vida/vidaMax) × 0.7 + 0.1) × facilidad × esfera, máximo 95 %.
 // La esfera se gasta aunque falle. A los guardianes no se les puede capturar.
 import { conPartida, fallar } from '../partida.js';

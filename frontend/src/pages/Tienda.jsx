@@ -17,10 +17,12 @@ export default function Tienda() {
   const [cantidades, setCantidades] = useState({});
   const [aviso, setAviso] = useState(null);
   const [ocupado, setOcupado] = useState(false);
+  const [curando, setCurando] = useState(false);
 
   // Ejecuta comprar o curar, muestra el resultado y actualiza la pantalla y la barra superior.
-  async function ejecutar(accion) {
+  async function ejecutar(accion, curar = false) {
     setOcupado(true);
+    if (curar) setCurando(true);
     setAviso(null);
     try {
       setAviso({ tipo: 'exito', texto: await accion() });
@@ -29,6 +31,7 @@ export default function Tienda() {
       setAviso({ tipo: 'error', texto: err.message });
     } finally {
       setOcupado(false);
+      setCurando(false);
     }
   }
 
@@ -94,7 +97,7 @@ export default function Tienda() {
         </Tarjeta>
         <Tarjeta titulo="Santuario" subtitulo="Curación gratuita">
           <p>Recupera toda la vida de tus criaturas, incluso las debilitadas.</p>
-          <Boton onClick={() => ejecutar(curarEquipo)} cargando={ocupado}>
+          <Boton onClick={() => ejecutar(curarEquipo, true)} cargando={curando} disabled={ocupado}>
             Curar equipo
           </Boton>
         </Tarjeta>

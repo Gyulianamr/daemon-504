@@ -87,9 +87,9 @@ export default function Combate() {
       if (!montadoRef.current) return;
 
       setMensajes((anteriores) => [...anteriores, ...respuesta.mensajes]);
-      setEncuentro(respuesta.encuentro);
 
       if (respuesta.final) {
+        setEncuentro(null);
         setFinal(respuesta.final);
         if (!refrescoFinalRef.current) {
           refrescoFinalRef.current = true;
@@ -99,6 +99,12 @@ export default function Combate() {
             if (montadoRef.current) setError(errorRefresco.message);
           }
         }
+      } else {
+        // El servicio devuelve el encuentro sin las vistas que usa la pantalla;
+        // pedimos el encuentro completo para redibujar las tarjetas.
+        const actualizado = await obtenerEncuentro();
+        if (!montadoRef.current) return;
+        setEncuentro(actualizado);
       }
     } catch (errorAccion) {
       if (!montadoRef.current) return;

@@ -50,6 +50,7 @@ function obtenerRival(datos, encuentro) {
     ...encuentro.rival,
     nombre: criatura.nombre,
     tipo: criatura.tipo,
+    rol: criatura.rol,
     ...estadisticas(criatura, encuentro.rival.nivel),
   };
 }
