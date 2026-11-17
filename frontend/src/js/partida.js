@@ -21,7 +21,7 @@ async function leerEstado() {
   const guardado = localStorage.getItem(CLAVE);
   if (guardado) return JSON.parse(guardado);
   const demo = await fetch('/data/partida-demo.json').then((r) => r.json());
-  return { usuarios: [demo.usuario], sesion: demo.usuario.id, partidas: { [demo.usuario.id]: demo.partida } };
+  return { usuarios: [demo.usuario], sesion: null, partidas: { [demo.usuario.id]: demo.partida } };
 }
 const guardarEstado = (estado) => localStorage.setItem(CLAVE, JSON.stringify(estado));
 const esperar = () => new Promise((r) => setTimeout(r, 250)); // simula el tiempo de respuesta de un servidor
