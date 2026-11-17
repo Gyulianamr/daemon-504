@@ -1,0 +1,25 @@
+.exploracion {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio-2);
+}
+
+.exploracion__principal,
+.exploracion__lateral {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  min-width: 0;
+}
+
+.exploracion__vencido {
+  font-weight: 700;
+  color: var(--color-exito);
+}
+
+@media (min-width: 900px) {
+  .exploracion {
+    grid-template-columns: 2fr 1fr;
+    align-items: start;
+  }
+}
