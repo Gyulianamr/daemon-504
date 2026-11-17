@@ -40,7 +40,9 @@ export default function TarjetaCriatura({
       <div className="tarjeta-criatura__estadisticas">
         <span>ATQ: {criatura.ataque}</span>
         <span>DEF: {criatura.defensa}</span>
-        <span>EXP: {criatura.experiencia}</span>
+        {criatura.experiencia !== undefined && (
+          <span>EXP: {criatura.experiencia}</span>
+        )}
       </div>
 
       {children && (
