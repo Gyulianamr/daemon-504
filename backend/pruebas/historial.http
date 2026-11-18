@@ -1,0 +1,50 @@
+# ═══════════════════════════════════════════════════════════════════
+# ESTA PARTE LA TIENE QUE INTEGRAR: Genesis Medina
+# Tarea A3-03 · Rama: feature/a3-jugador · Turno 1 (fecha máxima: miércoles 18 de noviembre)
+# Commit: "test(historial): pruebas de identificación e historial"
+# ═══════════════════════════════════════════════════════════════════
+# Pruebas de identificación del jugador e historial. Abrir con REST Client y pulsar «Send Request».
+# Antes: npm run db:preparar y npm run dev.
+
+@api = http://localhost:3000/api
+@demo = 00000000-0000-4000-8000-000000000001
+@nuevo = 00000000-0000-4000-8000-000000000002
+
+### 1. Sin usuario → 401 { "error": "Inicia sesión para continuar." }
+GET {{api}}/historial
+
+### 2. Usuario que no existe → 401
+GET {{api}}/historial
+X-Usuario-Id: 00000000-0000-4000-8000-000000000999
+
+### 3. X-Usuario-Id con formato inválido → 401
+GET {{api}}/historial
+X-Usuario-Id: no-es-un-uuid
+
+### 4. Usuario nuevo (sin personaje) → 404 { "error": "Aún no has creado tu personaje." }
+GET {{api}}/historial
+X-Usuario-Id: {{nuevo}}
+
+### 5. Demo → 200 { eventos (10), pagina: 1, totalPaginas: 2, total: 16 }
+GET {{api}}/historial
+X-Usuario-Id: {{demo}}
+
+### 6. Demo, página 2 → 200 con los 6 eventos más viejos
+GET {{api}}/historial?pagina=2
+X-Usuario-Id: {{demo}}
+
+### 7. Demo, filtro por tipo → 200 solo eventos CAPTURA
+GET {{api}}/historial?tipo=CAPTURA
+X-Usuario-Id: {{demo}}
+
+### 8. Tipo inválido → 400
+GET {{api}}/historial?tipo=BAILE
+X-Usuario-Id: {{demo}}
+
+### 9. Página 0 → 400 { "error": "La página debe ser un número entero mayor que 0." }
+GET {{api}}/historial?pagina=0
+X-Usuario-Id: {{demo}}
+
+### 10. Página que no es número → 400
+GET {{api}}/historial?pagina=abc
+X-Usuario-Id: {{demo}}
