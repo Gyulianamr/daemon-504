@@ -1,0 +1,18 @@
+# ═══════════════════════════════════════════════════════════════════
+# ESTA PARTE LA TIENE QUE INTEGRAR: Genesis Medina
+# Tarea A3-02 · Rama: feature/a3-base-datos · Turno 1 (fecha máxima: miércoles 18 de noviembre)
+# Commit: "test(catalogo): pruebas de salud y catálogo"
+# ═══════════════════════════════════════════════════════════════════
+# Pruebas de salud y catálogo. Abrir en VS Code con REST Client y pulsar «Send Request» en cada una.
+# Antes: npm run db:preparar y npm run dev.
+
+@api = http://localhost:3000/api
+
+### 1. Salud → 200 { "estado": "ok", "fecha": "..." }
+GET {{api}}/salud
+
+### 2. Catálogo → 200 con criaturas (20), zonas (8), objetos (3), tipos y eventos
+GET {{api}}/catalogo
+
+### 3. Ruta inexistente → 404 { "error": "No existe la ruta GET /api/no-existe." }
+GET {{api}}/no-existe

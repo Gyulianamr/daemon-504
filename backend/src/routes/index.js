@@ -6,6 +6,7 @@
 // Punto de entrada de todas las rutas de la API (se monta en /api).
 // Cada módulo nuevo agrega aquí su línea con su prefijo.
 import { Router } from 'express';
+import catalogo from './catalogo.js';
 
 const router = Router();
 
@@ -13,5 +14,7 @@ const router = Router();
 router.get('/salud', (req, res) => {
   res.json({ estado: 'ok', fecha: new Date().toISOString() });
 });
+
+router.use('/catalogo', catalogo); // público: no requiere usuario
 
 export default router;
