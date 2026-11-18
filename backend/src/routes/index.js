@@ -6,9 +6,15 @@
 // Punto de entrada de todas las rutas de la API (se monta en /api).
 // Cada módulo nuevo agrega aquí su línea con su prefijo.
 import { Router } from 'express';
+import { identificarJugador } from '../middleware/identificarJugador.js';
+import { exigirPersonaje } from '../middleware/exigirPersonaje.js';
 import catalogo from './catalogo.js';
+import historial from './historial.js';
 
 const router = Router();
+
+// Rutas del jugador: exigen X-Usuario-Id (401) y personaje creado (404).
+const jugador = [identificarJugador, exigirPersonaje];
 
 // GET /api/salud → comprueba que la API responde
 router.get('/salud', (req, res) => {
@@ -16,5 +22,6 @@ router.get('/salud', (req, res) => {
 });
 
 router.use('/catalogo', catalogo); // público: no requiere usuario
+router.use('/historial', jugador, historial);
 
 export default router;
