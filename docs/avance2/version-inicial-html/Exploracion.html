@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exploración - DAEMON 504</title>
+  <link rel="stylesheet" href="exploracion.css">
+</head>
+<body>
+
+  <header class="encabezado">
+    <h1>DAEMON 504: Guardianes del Umbral</h1>
+    <nav>
+      <a href="#">Mundo</a>
+      <a href="#">Equipo</a>
+      <a href="#">Inventario</a>
+      <a href="#">Historial</a>
+    </nav>
+  </header>
+
+  <main class="contenedor">
+
+    <!-- Zona actual -->
+    <section class="tarjeta">
+      <h2 id="nombreZona">Valle del Encanto</h2>
+      <p id="descripcionZona" class="texto-secundario"></p>
+
+      <!-- Temporal: el movimiento entre zonas lo hace Jenifer -->
+      <label for="selectorZona" class="texto-secundario">Zona actual (prueba)</label>
+      <select id="selectorZona"></select>
+
+      <button id="btnExplorar" class="boton-principal">Explorar</button>
+    </section>
+
+    <!-- Resultado de la última exploración -->
+    <section class="tarjeta" id="tarjetaResultado">
+      <h2>Resultado</h2>
+      <p id="textoResultado" class="texto-secundario">Pulsa Explorar para comenzar.</p>
+    </section>
+
+    <!-- Historial de exploración -->
+    <section class="tarjeta">
+      <h2>Historial de exploración</h2>
+      <ul id="historial" class="historial"></ul>
+    </section>
+
+  </main>
+
+  <script src="exploracion.js"></script>
+</body>
+</html>

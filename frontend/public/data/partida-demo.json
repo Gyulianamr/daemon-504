@@ -1,0 +1,31 @@
+{
+  "usuario": {
+    "id": "u-demo",
+    "correo": "demo@daemon504.hn",
+    "contrasena": "demo1234"
+  },
+  "partida": {
+    "nombre": "Aria",
+    "bytes": 650,
+    "zonaActual": "bosque",
+    "ultimaLocalidad": "valle",
+    "sellos": [
+      "g1"
+    ],
+    "criaturas": [
+      { "id": 1, "criaturaId": 2,  "nivel": 10, "experiencia": 0, "vida": 76, "posicion": 1 },
+      { "id": 2, "criaturaId": 7,  "nivel": 9,  "experiencia": 0, "vida": 67, "posicion": 2 },
+      { "id": 3, "criaturaId": 4,  "nivel": 10, "experiencia": 0, "vida": 68, "posicion": 3 },
+      { "id": 4, "criaturaId": 8,  "nivel": 9,  "experiencia": 0, "vida": 67, "posicion": 4 },
+      { "id": 5, "criaturaId": 12, "nivel": 9,  "experiencia": 0, "vida": 71, "posicion": null }
+    ],
+    "inventario": {
+      "1": 4,
+      "2": 1,
+      "3": 3
+    },
+    "historial": [],
+    "encuentro": null,
+    "siguienteId": 6
+  }
+}

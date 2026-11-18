@@ -1,0 +1,369 @@
+[
+  {
+    "id": "valle",
+    "nombre": "Valle del Encanto",
+    "tipo": "localidad",
+    "descripcion": "Localidad inicial. Un lugar tranquilo para comenzar la aventura.",
+    "nivelMin": 1,
+    "nivelMax": 3,
+    "conexiones": [
+      "pradera",
+      "lago"
+    ],
+    "requiere": null,
+    "tienda": [
+      1,
+      3
+    ],
+    "guardian": null,
+    "eventos": {
+      "nada": 50,
+      "criatura": 20,
+      "objeto": 25,
+      "evento": 5
+    },
+    "apariciones": [
+      {
+        "criaturaId": 1,
+        "peso": 30
+      },
+      {
+        "criaturaId": 2,
+        "peso": 25
+      },
+      {
+        "criaturaId": 3,
+        "peso": 10
+      },
+      {
+        "criaturaId": 7,
+        "peso": 35
+      }
+    ]
+  },
+  {
+    "id": "pradera",
+    "nombre": "La Pradera Misteriosa",
+    "tipo": "zona",
+    "descripcion": "Un campo abierto donde algo se mueve entre la hierba.",
+    "nivelMin": 2,
+    "nivelMax": 5,
+    "conexiones": [
+      "valle",
+      "bosque"
+    ],
+    "requiere": null,
+    "tienda": [],
+    "guardian": {
+      "id": "g1",
+      "criaturaId": 17,
+      "nivel": 6,
+      "sello": "Sello de la Pradera",
+      "recompensa": 100,
+      "abre": "bosque"
+    },
+    "eventos": {
+      "nada": 30,
+      "criatura": 40,
+      "objeto": 20,
+      "evento": 10
+    },
+    "apariciones": [
+      {
+        "criaturaId": 3,
+        "peso": 25
+      },
+      {
+        "criaturaId": 4,
+        "peso": 25
+      },
+      {
+        "criaturaId": 7,
+        "peso": 20
+      },
+      {
+        "criaturaId": 8,
+        "peso": 15
+      },
+      {
+        "criaturaId": 1,
+        "peso": 10
+      },
+      {
+        "criaturaId": 6,
+        "peso": 5
+      }
+    ]
+  },
+  {
+    "id": "lago",
+    "nombre": "Lago Sombrío",
+    "tipo": "localidad",
+    "descripcion": "Aguas oscuras y silenciosas rodean la orilla.",
+    "nivelMin": 3,
+    "nivelMax": 6,
+    "conexiones": [
+      "valle",
+      "umbral"
+    ],
+    "requiere": null,
+    "tienda": [
+      1,
+      2,
+      3
+    ],
+    "guardian": null,
+    "eventos": {
+      "nada": 35,
+      "criatura": 35,
+      "objeto": 20,
+      "evento": 10
+    },
+    "apariciones": [
+      {
+        "criaturaId": 2,
+        "peso": 40
+      },
+      {
+        "criaturaId": 5,
+        "peso": 25
+      },
+      {
+        "criaturaId": 8,
+        "peso": 20
+      },
+      {
+        "criaturaId": 4,
+        "peso": 15
+      }
+    ]
+  },
+  {
+    "id": "umbral",
+    "nombre": "Ciudad Umbral",
+    "tipo": "localidad",
+    "descripcion": "Una ciudad antigua que guarda la entrada a nuevas regiones.",
+    "nivelMin": 4,
+    "nivelMax": 7,
+    "conexiones": [
+      "lago",
+      "montana"
+    ],
+    "requiere": null,
+    "tienda": [
+      1,
+      2,
+      3
+    ],
+    "guardian": null,
+    "eventos": {
+      "nada": 50,
+      "criatura": 10,
+      "objeto": 30,
+      "evento": 10
+    },
+    "apariciones": [
+      {
+        "criaturaId": 5,
+        "peso": 45
+      },
+      {
+        "criaturaId": 6,
+        "peso": 30
+      },
+      {
+        "criaturaId": 13,
+        "peso": 25
+      }
+    ]
+  },
+  {
+    "id": "bosque",
+    "nombre": "Bosque del Guerrero",
+    "tipo": "zona",
+    "descripcion": "Árboles altos y caminos marcados por antiguas batallas.",
+    "nivelMin": 5,
+    "nivelMax": 8,
+    "conexiones": [
+      "pradera",
+      "montana"
+    ],
+    "requiere": "g1",
+    "tienda": [],
+    "guardian": {
+      "id": "g2",
+      "criaturaId": 18,
+      "nivel": 9,
+      "sello": "Sello del Bosque",
+      "recompensa": 200,
+      "abre": "montana"
+    },
+    "eventos": {
+      "nada": 25,
+      "criatura": 45,
+      "objeto": 15,
+      "evento": 15
+    },
+    "apariciones": [
+      {
+        "criaturaId": 6,
+        "peso": 25
+      },
+      {
+        "criaturaId": 3,
+        "peso": 20
+      },
+      {
+        "criaturaId": 12,
+        "peso": 20
+      },
+      {
+        "criaturaId": 11,
+        "peso": 15
+      },
+      {
+        "criaturaId": 1,
+        "peso": 10
+      },
+      {
+        "criaturaId": 7,
+        "peso": 10
+      }
+    ]
+  },
+  {
+    "id": "montana",
+    "nombre": "Montaña de la Tormenta",
+    "tipo": "zona",
+    "descripcion": "Rayos y viento fuerte recorren las rocas.",
+    "nivelMin": 7,
+    "nivelMax": 10,
+    "conexiones": [
+      "bosque",
+      "umbral",
+      "oscura"
+    ],
+    "requiere": "g2",
+    "tienda": [],
+    "guardian": {
+      "id": "g3",
+      "criaturaId": 19,
+      "nivel": 12,
+      "sello": "Sello de la Tormenta",
+      "recompensa": 300,
+      "abre": "oscura"
+    },
+    "eventos": {
+      "nada": 20,
+      "criatura": 50,
+      "objeto": 15,
+      "evento": 15
+    },
+    "apariciones": [
+      {
+        "criaturaId": 4,
+        "peso": 35
+      },
+      {
+        "criaturaId": 6,
+        "peso": 25
+      },
+      {
+        "criaturaId": 9,
+        "peso": 20
+      },
+      {
+        "criaturaId": 10,
+        "peso": 20
+      }
+    ]
+  },
+  {
+    "id": "oscura",
+    "nombre": "Ciudad Oscura",
+    "tipo": "zona",
+    "descripcion": "Una ciudad sin luz donde los sellos están muy débiles.",
+    "nivelMin": 9,
+    "nivelMax": 12,
+    "conexiones": [
+      "montana",
+      "cueva"
+    ],
+    "requiere": "g3",
+    "tienda": [],
+    "guardian": {
+      "id": "g4",
+      "criaturaId": 20,
+      "nivel": 14,
+      "sello": "Sello Oscuro",
+      "recompensa": 400,
+      "abre": "cueva"
+    },
+    "eventos": {
+      "nada": 20,
+      "criatura": 50,
+      "objeto": 10,
+      "evento": 20
+    },
+    "apariciones": [
+      {
+        "criaturaId": 5,
+        "peso": 40
+      },
+      {
+        "criaturaId": 14,
+        "peso": 25
+      },
+      {
+        "criaturaId": 13,
+        "peso": 20
+      },
+      {
+        "criaturaId": 4,
+        "peso": 15
+      }
+    ]
+  },
+  {
+    "id": "cueva",
+    "nombre": "Cueva de Terror",
+    "tipo": "zona",
+    "descripcion": "Un túnel profundo. Nadie sabe qué hay al fondo.",
+    "nivelMin": 11,
+    "nivelMax": 15,
+    "conexiones": [
+      "oscura"
+    ],
+    "requiere": "g4",
+    "tienda": [],
+    "guardian": null,
+    "eventos": {
+      "nada": 15,
+      "criatura": 55,
+      "objeto": 10,
+      "evento": 20
+    },
+    "apariciones": [
+      {
+        "criaturaId": 5,
+        "peso": 30
+      },
+      {
+        "criaturaId": 15,
+        "peso": 25
+      },
+      {
+        "criaturaId": 6,
+        "peso": 20
+      },
+      {
+        "criaturaId": 16,
+        "peso": 15
+      },
+      {
+        "criaturaId": 11,
+        "peso": 10
+      }
+    ]
+  }
+]

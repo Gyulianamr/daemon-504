@@ -1,0 +1,15 @@
+.equipo__libre {
+  display: grid;
+  place-items: center;
+  min-height: 120px;
+  border: 2px dashed var(--color-borde);
+  border-radius: var(--radio);
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.equipo__subtitulo {
+  font-size: var(--texto-lg);
+  color: var(--color-principal);
+  margin-top: var(--espacio-1);
+}
