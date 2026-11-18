@@ -231,16 +231,17 @@ export default function Combate() {
                 >
                   Usar curaball
                 </Boton>
-                <Boton
-                  className="combate__accion"
-                  variante="secundario"
-                  ancho
-                  disabled={enviando || encuentro.esGuardian}
-                  onClick={alHuir}
-                >
-                  Huir
-                </Boton>
-                {encuentro.esGuardian && (
+                {!encuentro.esGuardian ? (
+                  <Boton
+                    className="combate__accion"
+                    variante="secundario"
+                    ancho
+                    disabled={enviando}
+                    onClick={alHuir}
+                  >
+                    Huir
+                  </Boton>
+                ) : (
                   <p className="combate__nota">
                     No puedes huir de un combate contra un guardián.
                   </p>

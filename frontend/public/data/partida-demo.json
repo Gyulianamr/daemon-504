@@ -13,46 +13,11 @@
       "g1"
     ],
     "criaturas": [
-      {
-        "id": 1,
-        "criaturaId": 2,
-        "nivel": 7,
-        "experiencia": 40,
-        "vida": 40,
-        "posicion": 1
-      },
-      {
-        "id": 2,
-        "criaturaId": 7,
-        "nivel": 5,
-        "experiencia": 10,
-        "vida": 18,
-        "posicion": 2
-      },
-      {
-        "id": 3,
-        "criaturaId": 4,
-        "nivel": 4,
-        "experiencia": 0,
-        "vida": 30,
-        "posicion": 3
-      },
-      {
-        "id": 4,
-        "criaturaId": 8,
-        "nivel": 4,
-        "experiencia": 0,
-        "vida": 0,
-        "posicion": 4
-      },
-      {
-        "id": 5,
-        "criaturaId": 12,
-        "nivel": 6,
-        "experiencia": 20,
-        "vida": 50,
-        "posicion": null
-      }
+      { "id": 1, "criaturaId": 2,  "nivel": 10, "experiencia": 0, "vida": 76, "posicion": 1 },
+      { "id": 2, "criaturaId": 7,  "nivel": 9,  "experiencia": 0, "vida": 67, "posicion": 2 },
+      { "id": 3, "criaturaId": 4,  "nivel": 10, "experiencia": 0, "vida": 68, "posicion": 3 },
+      { "id": 4, "criaturaId": 8,  "nivel": 9,  "experiencia": 0, "vida": 67, "posicion": 4 },
+      { "id": 5, "criaturaId": 12, "nivel": 9,  "experiencia": 0, "vida": 71, "posicion": null }
     ],
     "inventario": {
       "1": 4,
