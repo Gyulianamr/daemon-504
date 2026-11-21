@@ -18,7 +18,9 @@ export const pool = new pg.Pool({
   // Supabase exige SSL. Su pooler usa un certificado que Node no reconoce por defecto,
   // por eso no se rechaza (la conexión igual va cifrada).
   ssl: config.baseDatos.ssl ? { rejectUnauthorized: false } : false,
-  max: 10,
+  // El Session pooler de Supabase deja 15 conexiones para TODO el proyecto (y las compartimos entre el
+  // equipo): con 10 por servidor se agotaban (EMAXCONNSESSION). Con 5, las demás solicitudes esperan turno.
+  max: 5,
 });
 
 // Si una conexión inactiva se cae, se registra y el pool abre otra cuando haga falta.
