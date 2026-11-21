@@ -1,0 +1,68 @@
+# ═══════════════════════════════════════════════════════════════════
+# ESTA PARTE LA TIENE QUE INTEGRAR: Jatniel Oliva
+# Tarea A3-06 · Rama: feature/a3-inventario · Turno 2 (fecha máxima: jueves 19 de noviembre)
+# Commit: "test(inventario): pruebas del inventario"
+# ═══════════════════════════════════════════════════════════════════
+# Pruebas del inventario. Enviarlas EN ORDEN con REST Client («Send Request»).
+# Antes: npm run db:preparar y npm run dev. El demo empieza con 4 TamaBall, 1 Superball y 3 Curaball,
+# y sus criaturas (ids 1 a 5) con la vida completa. Repetir el archivo requiere otro npm run db:preparar.
+
+@api = http://localhost:3000/api
+@demo = 00000000-0000-4000-8000-000000000001
+@nuevo = 00000000-0000-4000-8000-000000000002
+
+### 1. Ver el inventario → 200, 3 objetos con su cantidad (Curaball: 3)
+GET {{api}}/inventario
+X-Usuario-Id: {{demo}}
+
+### 2. Sin usuario → 401
+GET {{api}}/inventario
+
+### 3. Usuario nuevo (sin personaje) → 404
+GET {{api}}/inventario
+X-Usuario-Id: {{nuevo}}
+
+### 4. Curaball en una criatura con la vida llena → 409 «… ya tiene la vida completa.»
+POST {{api}}/inventario/usar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "objetoId": 3, "criaturaId": 1 }
+
+### 5. Objeto que no es de curación (TamaBall) → 400 «Ese objeto no se puede usar aquí.»
+POST {{api}}/inventario/usar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "objetoId": 1, "criaturaId": 1 }
+
+### 6. Criatura que no existe o no es tuya → 404 «Esa criatura no es tuya.»
+POST {{api}}/inventario/usar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "objetoId": 3, "criaturaId": 9999 }
+
+### 7. Cuerpo inválido (sin criaturaId) → 400
+POST {{api}}/inventario/usar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "objetoId": 3 }
+
+### 8. Para curar de verdad hay que herir a una criatura: en el combate de /api/combate (otro módulo)
+# o, mientras tanto, bajándole la vida en Supabase: UPDATE criaturas_jugador SET vida = 50 WHERE id = 1;
+# Con la vida en 50, esta solicitud → 200 { "mensaje": "Aquabit ahora tiene 70/76 HP." } y quedan 2 Curaball
+POST {{api}}/inventario/usar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "objetoId": 3, "criaturaId": 1 }
+
+### 9. Ver que bajó la cantidad → Curaball: 2
+GET {{api}}/inventario
+X-Usuario-Id: {{demo}}
+
+### 10. Ver el evento en el historial → «Usaste Curaball en Aquabit.»
+GET {{api}}/historial
+X-Usuario-Id: {{demo}}
