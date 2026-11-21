@@ -11,6 +11,7 @@ import { exigirPersonaje } from '../middleware/exigirPersonaje.js';
 import catalogo from './catalogo.js';
 import historial from './historial.js';
 import equipo from './equipo.js';
+import personaje from './personaje.js';
 
 const router = Router();
 
@@ -25,5 +26,6 @@ router.get('/salud', (req, res) => {
 router.use('/catalogo', catalogo); // público: no requiere usuario
 router.use('/historial', jugador, historial);
 router.use('/equipo', jugador, equipo);
+router.use('/personaje', personaje); // POST solo pide usuario; GET, PATCH y DELETE piden también personaje
 
 export default router;
