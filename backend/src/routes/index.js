@@ -10,6 +10,7 @@ import { identificarJugador } from '../middleware/identificarJugador.js';
 import { exigirPersonaje } from '../middleware/exigirPersonaje.js';
 import catalogo from './catalogo.js';
 import historial from './historial.js';
+import equipo from './equipo.js';
 
 const router = Router();
 
@@ -23,5 +24,6 @@ router.get('/salud', (req, res) => {
 
 router.use('/catalogo', catalogo); // público: no requiere usuario
 router.use('/historial', jugador, historial);
+router.use('/equipo', jugador, equipo);
 
 export default router;
