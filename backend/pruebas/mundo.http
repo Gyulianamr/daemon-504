@@ -1,0 +1,41 @@
+# ═══════════════════════════════════════════════════════════════════
+# ESTA PARTE LA TIENE QUE INTEGRAR: Dinora Padilla
+# Tarea A3-07 · Rama: feature/a3-mundo · Turno 3 (fecha máxima: viernes 20 de noviembre)
+# Commit: "test(mundo): pruebas de movimiento"
+# ═══════════════════════════════════════════════════════════════════
+# Pruebas de A3-07 (el demo empieza en el Bosque del Guerrero)
+@api = http://localhost:3000/api
+@demo = 00000000-0000-4000-8000-000000000001
+@nuevo = 00000000-0000-4000-8000-000000000002
+
+### Zona actual y destinos
+GET {{api}}/mundo/actual
+X-Usuario-Id: {{demo}}
+
+### Zona no conectada → 400
+POST {{api}}/mundo/mover
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "destino": "cueva" }
+
+### Zona bloqueada (necesita el Sello del Bosque) → 403
+POST {{api}}/mundo/mover
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "destino": "montana" }
+
+### Moverse a una zona conectada → 200
+POST {{api}}/mundo/mover
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "destino": "pradera" }
+
+### Sin destino → 400
+POST {{api}}/mundo/mover
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{}
