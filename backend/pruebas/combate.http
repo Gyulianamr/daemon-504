@@ -1,0 +1,165 @@
+# ═══════════════════════════════════════════════════════════════════
+# Pruebas de A3-10: endpoints de combate.
+# Ejecutar npm run db:preparar (reinicia las tablas) y npm run dev antes de empezar.
+# Enviar las solicitudes en orden. El demo inicia en bosque, tiene el sello g1
+# y puede desafiar al guardian g2.
+# ═══════════════════════════════════════════════════════════════════
+@api = http://localhost:3000/api
+@demo = 00000000-0000-4000-8000-000000000001
+@nuevo = 00000000-0000-4000-8000-000000000002
+@encuentro = 0
+@turno = 1
+
+### 1. Sin combate activo: devuelve null
+GET {{api}}/encuentros/actual
+X-Usuario-Id: {{demo}}
+
+### 2. Sin sesion: 401
+GET {{api}}/encuentros/actual
+
+### 3. Usuario sin personaje: 404
+GET {{api}}/encuentros/actual
+X-Usuario-Id: {{nuevo}}
+
+### 3b. Crear personaje secundario para comprobar aislamiento por propietario: 201
+POST {{api}}/personaje
+X-Usuario-Id: {{nuevo}}
+Content-Type: application/json
+
+{ "nombre": "Prueba", "criaturaInicialId": 1 }
+
+### 4. Desafiar al guardian del bosque: 201
+# Copia el id y turno de la respuesta en @encuentro y @turno.
+POST {{api}}/encuentros/guardian
+X-Usuario-Id: {{demo}}
+
+### 4b. Encuentro de otro personaje: 404
+POST {{api}}/encuentros/{{encuentro}}/atacar
+X-Usuario-Id: {{nuevo}}
+Content-Type: application/json
+
+{ "turno": {{turno}} }
+
+### 5. Consultar el combate activo
+GET {{api}}/encuentros/actual
+X-Usuario-Id: {{demo}}
+
+### 6. Huir del guardian: 409 (no consume el turno)
+POST {{api}}/encuentros/{{encuentro}}/huir
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "turno": {{turno}} }
+
+### 7. Accion sin turno: 400
+POST {{api}}/encuentros/{{encuentro}}/atacar
+X-Usuario-Id: {{demo}}
+
+### 8. Turno cero: 400
+POST {{api}}/encuentros/{{encuentro}}/atacar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "turno": 0 }
+
+### 9. Id no numerico: 400
+POST {{api}}/encuentros/abc/atacar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "turno": {{turno}} }
+
+### 10. Encuentro inexistente: 404
+POST {{api}}/encuentros/999999/atacar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "turno": {{turno}} }
+
+### 11. Curar con vida completa: 409
+# En la partida demo recien preparada, la criatura activa inicia con vida completa.
+POST {{api}}/encuentros/{{encuentro}}/curar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "turno": {{turno}} }
+
+### 12. Atacar: 200; el rival responde y turno aumenta
+POST {{api}}/encuentros/{{encuentro}}/atacar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "turno": {{turno}} }
+
+### 13. Repetir el turno anterior: 409
+# Envia antes de actualizar @turno; despues copia el nuevo turno de la respuesta 12.
+POST {{api}}/encuentros/{{encuentro}}/atacar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "turno": {{turno}} }
+
+### 14. Curar despues del ataque rival: 200
+# Actualiza @turno con el turno vigente antes de enviar.
+POST {{api}}/encuentros/{{encuentro}}/curar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "turno": {{turno}} }
+
+### 15. Continuar atacando hasta que final sea "victoria"
+# Actualiza @turno despues de cada respuesta. Si final no es null, no envies mas acciones.
+POST {{api}}/encuentros/{{encuentro}}/atacar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "turno": {{turno}} }
+
+### 16. Al terminar: el encuentro actual es null
+GET {{api}}/encuentros/actual
+X-Usuario-Id: {{demo}}
+
+### 17. Tras vencer: bosque queda desbloqueado
+GET {{api}}/mundo/actual
+X-Usuario-Id: {{demo}}
+
+# ── Escenario separado de derrota ──────────────────────────────────
+# Despues de completar victoria: vuelve a ejecutar npm run db:preparar.
+# Deja solo a Aquabit (id 1) activo para que el guardian pueda derrotarlo.
+
+### D1. Mandar las criaturas 2, 3 y 4 a reserva; queda Aquabit como unica activa
+PATCH {{api}}/equipo/2/reserva
+X-Usuario-Id: {{demo}}
+
+###
+PATCH {{api}}/equipo/3/reserva
+X-Usuario-Id: {{demo}}
+
+###
+PATCH {{api}}/equipo/4/reserva
+X-Usuario-Id: {{demo}}
+
+### D2. Desafiar otra vez al guardian despues de reiniciar la base: 201
+# Copia el id y turno de la respuesta en @encuentro y @turno.
+POST {{api}}/encuentros/guardian
+X-Usuario-Id: {{demo}}
+
+### D3. Atacar hasta que final sea "derrota"
+# Actualiza @turno despues de cada respuesta. El encuentro debe terminar con final "derrota".
+POST {{api}}/encuentros/{{encuentro}}/atacar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "turno": {{turno}} }
+
+### D4. Despues de la derrota: encuentro cerrado y regreso al valle
+GET {{api}}/encuentros/actual
+X-Usuario-Id: {{demo}}
+
+###
+GET {{api}}/mundo/actual
+X-Usuario-Id: {{demo}}
+
+### D5. El equipo activo y la reserva regresaron con vida completa
+GET {{api}}/equipo
+X-Usuario-Id: {{demo}}
