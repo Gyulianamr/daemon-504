@@ -13,6 +13,8 @@ import historial from './historial.js';
 import equipo from './equipo.js';
 import personaje from './personaje.js';
 import inventario from './inventario.js';
+import mundo from './mundo.js';
+
 
 const router = Router();
 
@@ -29,5 +31,7 @@ router.use('/historial', jugador, historial);
 router.use('/equipo', jugador, equipo);
 router.use('/personaje', personaje); // POST solo pide usuario; GET, PATCH y DELETE piden también personaje
 router.use('/inventario', jugador, inventario);
+router.use('/mundo', jugador, mundo);
+
 
 export default router;
