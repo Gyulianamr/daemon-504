@@ -1,0 +1,23 @@
+# ═══════════════════════════════════════════════════════════════════
+# ESTA PARTE LA TIENE QUE INTEGRAR: Dinora Padilla
+# Tarea A3-08 · Rama: feature/a3-exploracion · Turno 3 (fecha máxima: viernes 20 de noviembre)
+# Commit: "test(exploracion): pruebas de exploración"
+# ═══════════════════════════════════════════════════════════════════
+# Pruebas de A3-08: enviar "Explorar" varias veces; cuando salga una criatura, explorar y moverse dan 409.
+@api = http://localhost:3000/api
+@demo = 00000000-0000-4000-8000-000000000001
+
+### Explorar → 200 (nada, objeto, evento o criatura)
+POST {{api}}/exploracion
+X-Usuario-Id: {{demo}}
+
+### Con criatura pendiente: explorar otra vez → 409
+POST {{api}}/exploracion
+X-Usuario-Id: {{demo}}
+
+### Con criatura pendiente: moverse → 409
+POST {{api}}/mundo/mover
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "destino": "pradera" }
