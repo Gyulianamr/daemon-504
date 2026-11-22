@@ -15,6 +15,7 @@ import personaje from './personaje.js';
 import inventario from './inventario.js';
 import mundo from './mundo.js';
 import exploracion from './exploracion.js';
+import encuentros from './encuentros.js';
 
 
 const router = Router();
@@ -34,5 +35,6 @@ router.use('/personaje', personaje); // POST solo pide usuario; GET, PATCH y DEL
 router.use('/inventario', jugador, inventario);
 router.use('/mundo', jugador, mundo);
 router.use('/exploracion', jugador, exploracion);
+router.use('/encuentros', jugador, encuentros);
 
 export default router;
