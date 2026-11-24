@@ -16,6 +16,9 @@ import inventario from './inventario.js';
 import mundo from './mundo.js';
 import exploracion from './exploracion.js';
 import encuentros from './encuentros.js';
+import tienda from './tienda.js';
+import santuario from './santuario.js';
+
 
 
 const router = Router();
@@ -36,5 +39,8 @@ router.use('/inventario', jugador, inventario);
 router.use('/mundo', jugador, mundo);
 router.use('/exploracion', jugador, exploracion);
 router.use('/encuentros', jugador, encuentros);
+router.use('/tienda', jugador, tienda);
+router.use('/santuario', jugador, santuario);
+
 
 export default router;
