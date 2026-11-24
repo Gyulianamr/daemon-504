@@ -1,0 +1,125 @@
+# ═══════════════════════════════════════════════════════════════════
+# ESTA PARTE LA TIENE QUE INTEGRAR: Heysser Machado
+# Tarea A3-13 · Rama: feature/a3-tienda · Turno 6 (fecha máxima: lunes 23 de noviembre)
+# Commit: "test(tienda): pruebas de tienda y santuario"
+# ═══════════════════════════════════════════════════════════════════
+# Pruebas de tienda y santuario. Enviarlas EN ORDEN con REST Client («Send Request»).
+# Antes: npm run db:preparar y npm run dev. El demo empieza en el Bosque del Guerrero con 650 bytes
+# (el bosque NO es localidad). Para comprar hay que viajar: bosque → pradera → valle (pasos 4 y 5).
+# Precios del catálogo: TamaBall 100 · MegaBall 250 · Curaball 60. El Valle del Encanto vende TamaBall y Curaball.
+# Repetir el archivo requiere otro npm run db:preparar.
+
+@api = http://localhost:3000/api
+@demo = 00000000-0000-4000-8000-000000000001
+@nuevo = 00000000-0000-4000-8000-000000000002
+
+### 1. Sin usuario → 401
+GET {{api}}/tienda
+
+### 2. Usuario nuevo (sin personaje) → 404 «Aún no has creado tu personaje.»
+GET {{api}}/tienda
+X-Usuario-Id: {{nuevo}}
+
+### 3. Tienda en el bosque (no es localidad) → 200 { esLocalidad: false, productos: [] }
+GET {{api}}/tienda
+X-Usuario-Id: {{demo}}
+
+### 3b. Comprar fuera de una localidad → 400 «Ese objeto no se vende aquí.»
+POST {{api}}/tienda/comprar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "objetoId": 1, "cantidad": 1 }
+
+### 3c. Santuario fuera de una localidad → 403 «El santuario solo está en las localidades.»
+POST {{api}}/santuario/curar
+X-Usuario-Id: {{demo}}
+
+### 4. Viajar a la pradera → 200 (mundo.http)
+POST {{api}}/mundo/mover
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "destino": "pradera" }
+
+### 5. Viajar al valle (es localidad) → 200
+POST {{api}}/mundo/mover
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "destino": "valle" }
+
+### 6. Tienda del valle → 200 { zona: "Valle del Encanto", esLocalidad: true, bytes: 650, productos: TamaBall y Curaball }
+GET {{api}}/tienda
+X-Usuario-Id: {{demo}}
+
+### 7. Comprar 2 Curaball → 200 { mensaje: "Compraste 2 Curaball por 120 bytes.", bytes: 530 }
+POST {{api}}/tienda/comprar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "objetoId": 3, "cantidad": 2 }
+
+### 8. Precio falso → 200 y cobra el del catálogo: 1 TamaBall = 100 bytes (quedan 430), no 1
+POST {{api}}/tienda/comprar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "objetoId": 1, "cantidad": 1, "precio": 1 }
+
+### 9. Cantidad 50 → 400 «La cantidad debe estar entre 1 y 10.»
+POST {{api}}/tienda/comprar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "objetoId": 1, "cantidad": 50 }
+
+### 9b. Cantidad 0 → 400
+POST {{api}}/tienda/comprar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "objetoId": 1, "cantidad": 0 }
+
+### 9c. Cantidad con decimales → 400
+POST {{api}}/tienda/comprar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "objetoId": 1, "cantidad": 1.5 }
+
+### 10. Objeto que esta localidad no vende (MegaBall) → 400 «Ese objeto no se vende aquí.»
+POST {{api}}/tienda/comprar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "objetoId": 2, "cantidad": 1 }
+
+### 11. Sin objetoId → 400 «Indica qué objeto quieres comprar.»
+POST {{api}}/tienda/comprar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "cantidad": 1 }
+
+### 12. Sin bytes suficientes: 10 TamaBall = 1000 bytes y el demo tiene menos → 409 «Necesitas 1000 bytes y tienes 430.»
+POST {{api}}/tienda/comprar
+X-Usuario-Id: {{demo}}
+Content-Type: application/json
+
+{ "objetoId": 1, "cantidad": 10 }
+
+### 13. Los bytes no cambiaron tras los rechazos → 200 { bytes: 430 }
+GET {{api}}/tienda
+X-Usuario-Id: {{demo}}
+
+### 14. Santuario en una localidad → 200 { mensaje: "Tu equipo recuperó toda su vida." }
+# Para ver la cura de verdad, antes bájale la vida a una criatura en Supabase:
+#   UPDATE criaturas_jugador SET vida = 10 WHERE id = 1;
+# y comprueba con GET /api/equipo que vuelve a su vida máxima.
+POST {{api}}/santuario/curar
+X-Usuario-Id: {{demo}}
+
+### 15. Las compras y la cura quedan en el historial (tipos COMPRA y CURACION) → 200
+GET {{api}}/historial?tipo=COMPRA
+X-Usuario-Id: {{demo}}
