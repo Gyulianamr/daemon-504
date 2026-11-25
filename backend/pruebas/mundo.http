@@ -5,37 +5,56 @@
 # ═══════════════════════════════════════════════════════════════════
 # Pruebas de A3-07 (el demo empieza en el Bosque del Guerrero)
 @api = http://localhost:3000/api
-@demo = 00000000-0000-4000-8000-000000000001
-@nuevo = 00000000-0000-4000-8000-000000000002
+
+# Antes de estas pruebas: enviar primero las dos solicitudes de inicio de sesión (guardan el token).
+
+### Iniciar sesión con la cuenta demo (enviar primero)
+# @name loginDemo
+POST {{api}}/acceso/iniciar-sesion
+Content-Type: application/json
+
+{ "correo": "demo@daemon504.hn", "contrasena": "demo1234" }
+
+@tokenDemo = {{loginDemo.response.body.token}}
+
+### Iniciar sesión con la cuenta nueva (enviar primero)
+# @name loginNuevo
+POST {{api}}/acceso/iniciar-sesion
+Content-Type: application/json
+
+{ "correo": "nuevo@daemon504.hn", "contrasena": "nuevo1234" }
+
+@tokenNuevo = {{loginNuevo.response.body.token}}
+
 
 ### Zona actual y destinos
 GET {{api}}/mundo/actual
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### Zona no conectada → 400
 POST {{api}}/mundo/mover
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "destino": "cueva" }
 
 ### Zona bloqueada (necesita el Sello del Bosque) → 403
 POST {{api}}/mundo/mover
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "destino": "montana" }
 
 ### Moverse a una zona conectada → 200
 POST {{api}}/mundo/mover
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "destino": "pradera" }
 
 ### Sin destino → 400
 POST {{api}}/mundo/mover
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 {}

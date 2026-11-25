@@ -16,8 +16,27 @@
 #   Parte 5  Historial y cierre (renombrar y borrar el personaje nuevo)
 
 @api = http://localhost:3000/api
-@demo = 00000000-0000-4000-8000-000000000001
-@nuevo = 00000000-0000-4000-8000-000000000002
+
+# Antes de estas pruebas: enviar primero las dos solicitudes de inicio de sesión (guardan el token).
+
+### Iniciar sesión con la cuenta demo (enviar primero)
+# @name loginDemo
+POST {{api}}/acceso/iniciar-sesion
+Content-Type: application/json
+
+{ "correo": "demo@daemon504.hn", "contrasena": "demo1234" }
+
+@tokenDemo = {{loginDemo.response.body.token}}
+
+### Iniciar sesión con la cuenta nueva (enviar primero)
+# @name loginNuevo
+POST {{api}}/acceso/iniciar-sesion
+Content-Type: application/json
+
+{ "correo": "nuevo@daemon504.hn", "contrasena": "nuevo1234" }
+
+@tokenNuevo = {{loginNuevo.response.body.token}}
+
 
 # ═════════════ PARTE 1 · Servidor y catálogo ═════════════
 
@@ -37,18 +56,18 @@ GET {{api}}/personaje
 
 ### 2.1 Aún no tiene personaje → 404 «Aún no has creado tu personaje.»
 GET {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 
 ### 2.2 Crear el personaje → 201 con 300 bytes (aunque se envíe otro valor), en el Valle del Encanto
 POST {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "nombre": "Kira", "criaturaInicialId": 1, "bytes": 99999 }
 
 ### 2.3 Un segundo personaje → 409 «Ya tienes un personaje.»
 POST {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "nombre": "Otra", "criaturaInicialId": 1 }
@@ -56,66 +75,66 @@ Content-Type: application/json
 ### 2.4 Equipo: una sola criatura activa y ninguna en reserva → 200
 # @name equipoNuevo
 GET {{api}}/equipo
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 
 ### 2.5 Ponerle apodo a la criatura → 200 (usa el id leído en 2.4)
 PATCH {{api}}/equipo/{{equipoNuevo.response.body.$.activo[0].id}}/apodo
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "apodo": "Chispa" }
 
 ### 2.6 No se puede dejar el equipo vacío → 409
 PATCH {{api}}/equipo/{{equipoNuevo.response.body.$.activo[0].id}}/reserva
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 
 ### 2.7 Inventario inicial: 5 TamaBall y 3 Curaball → 200
 GET {{api}}/inventario
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 
 ### 2.8 Tienda del valle → 200 { esLocalidad: true, bytes: 300, productos: TamaBall y Curaball }
 GET {{api}}/tienda
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 
 ### 2.9 Comprar con un precio falso → 200 y cobra el del catálogo: 2 TamaBall = 200 bytes (quedan 100)
 POST {{api}}/tienda/comprar
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "objetoId": 1, "cantidad": 2, "precio": 1 }
 
 ### 2.10 Sin bytes suficientes: 3 Curaball = 180 y tiene 100 → 409 (los bytes no cambian)
 POST {{api}}/tienda/comprar
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "objetoId": 3, "cantidad": 3 }
 
 ### 2.11 Cantidad fuera de rango (11) → 400
 POST {{api}}/tienda/comprar
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "objetoId": 1, "cantidad": 11 }
 
 ### 2.12 Santuario en una localidad → 200 «Tu equipo recuperó toda su vida.»
 POST {{api}}/santuario/curar
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 
 ### 2.13 Viajar a la pradera (no es localidad) → 200
 POST {{api}}/mundo/mover
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "destino": "pradera" }
 
 ### 2.14 Santuario fuera de una localidad → 403
 POST {{api}}/santuario/curar
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 
 ### 2.15 Intentar ir a una zona que no está conectada (cueva) → 400
 POST {{api}}/mundo/mover
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "destino": "cueva" }
@@ -125,11 +144,11 @@ Content-Type: application/json
 
 ### 3.1 Zona actual: la Montaña de la Tormenta está bloqueada → 200
 GET {{api}}/mundo/actual
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 3.2 Ir a la montaña bloqueada → 403 «necesitas el Sello del Bosque»
 POST {{api}}/mundo/mover
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "destino": "montana" }
@@ -137,43 +156,43 @@ Content-Type: application/json
 ### 3.3 Desafiar al guardián del bosque → 201 { id, turno: 1, esGuardian: true, … }
 # @name guardian
 POST {{api}}/encuentros/guardian
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 3.4 Con el combate pendiente no se puede explorar → 409
 POST {{api}}/exploracion
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 3.5 Con el combate pendiente no se puede moverse → 409
 POST {{api}}/mundo/mover
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "destino": "pradera" }
 
 ### 3.6 Huir de un guardián → 409
 POST {{api}}/encuentros/{{guardian.response.body.$.id}}/huir
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "turno": {{guardian.response.body.$.turno}} }
 
 ### 3.7 Capturar a un guardián → 409
 POST {{api}}/encuentros/{{guardian.response.body.$.id}}/capturar
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "turno": {{guardian.response.body.$.turno}}, "objetoId": 1 }
 
 ### 3.8 Primer ataque con el turno del guardián → 200 { mensajes, final: null, encuentro: { turno: 2 } }
 POST {{api}}/encuentros/{{guardian.response.body.$.id}}/atacar
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "turno": {{guardian.response.body.$.turno}} }
 
 ### 3.9 Repetir ese mismo turno → 409 «Ese turno ya pasó.»
 POST {{api}}/encuentros/{{guardian.response.body.$.id}}/atacar
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "turno": {{guardian.response.body.$.turno}} }
@@ -183,44 +202,44 @@ Content-Type: application/json
 # en vez de 3.10b para curarla con una Curaball. Si final es "derrota", el equipo cayó: vuelve a 3.3.
 # @name actual
 GET {{api}}/encuentros/actual
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 3.10b Atacar → 200 { mensajes, final, encuentro }
 POST {{api}}/encuentros/{{actual.response.body.$.id}}/atacar
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "turno": {{actual.response.body.$.turno}} }
 
 ### 3.10c Curar a la criatura activa con una Curaball (en vez de atacar) → 200
 POST {{api}}/encuentros/{{actual.response.body.$.id}}/curar
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "turno": {{actual.response.body.$.turno}} }
 
 ### 3.11 Terminado el combate no queda ninguno activo → 200 null
 GET {{api}}/encuentros/actual
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 3.12 Tras vencer: el personaje tiene 2 sellos y ganó bytes → 200
 GET {{api}}/personaje
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 3.13 Tras vencer: la Montaña de la Tormenta quedó desbloqueada → 200 (bloqueada: false)
 GET {{api}}/mundo/actual
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 3.14 Ir a la montaña ya desbloqueada → 200
 POST {{api}}/mundo/mover
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "destino": "montana" }
 
 ### 3.15 Volver al bosque → 200
 POST {{api}}/mundo/mover
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "destino": "bosque" }
@@ -230,11 +249,11 @@ Content-Type: application/json
 ### 4.1 Explorar hasta que salga una criatura (tipo "criatura"); si sale otra cosa, volver a enviar
 # @name explorar
 POST {{api}}/exploracion
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 4.2 Capturar con una Curaball (no es esfera) → 400
 POST {{api}}/encuentros/{{explorar.response.body.$.encuentroId}}/capturar
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "turno": 1, "objetoId": 3 }
@@ -242,56 +261,56 @@ Content-Type: application/json
 ### 4.3 Lanzar una TamaBall → 200. Si final es null la criatura escapó: volver a enviar 4.3b
 # @name actualCaptura
 GET {{api}}/encuentros/actual
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 4.3b Capturar con TamaBall (con el turno vigente)
 POST {{api}}/encuentros/{{actualCaptura.response.body.$.id}}/capturar
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "turno": {{actualCaptura.response.body.$.turno}}, "objetoId": 1 }
 
 ### 4.4 La criatura capturada aparece en el equipo (o en la reserva si estaba lleno) → 200
 GET {{api}}/equipo
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 4.5 La TamaBall se descontó del inventario → 200
 GET {{api}}/inventario
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 # ═════════════ PARTE 5 · Historial y cierre ═════════════
 
 ### 5.1 Historial del demo: movimientos, combates, captura → 200 { eventos, pagina, totalPaginas, total }
 GET {{api}}/historial
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 5.2 Filtrar por tipo → 200 (solo COMBATE)
 GET {{api}}/historial?tipo=COMBATE
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 5.3 Tipo inválido → 400
 GET {{api}}/historial?tipo=INVENTADO
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 5.4 Página 0 → 400
 GET {{api}}/historial?pagina=0
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 5.5 Historial del jugador nuevo: compra y curación → 200
 GET {{api}}/historial
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 
 ### 5.6 Renombrar el personaje nuevo → 200
 PATCH {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "nombre": "Kira Mayor" }
 
 ### 5.7 Borrar la partida del jugador nuevo → 204
 DELETE {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 
 ### 5.8 Ya no tiene personaje → 404
 GET {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}

@@ -8,100 +8,119 @@
 # Cada cambio responde con el equipo completo: { activo, reserva, maximo }.
 
 @api = http://localhost:3000/api
-@demo = 00000000-0000-4000-8000-000000000001
-@nuevo = 00000000-0000-4000-8000-000000000002
+
+# Antes de estas pruebas: enviar primero las dos solicitudes de inicio de sesión (guardan el token).
+
+### Iniciar sesión con la cuenta demo (enviar primero)
+# @name loginDemo
+POST {{api}}/acceso/iniciar-sesion
+Content-Type: application/json
+
+{ "correo": "demo@daemon504.hn", "contrasena": "demo1234" }
+
+@tokenDemo = {{loginDemo.response.body.token}}
+
+### Iniciar sesión con la cuenta nueva (enviar primero)
+# @name loginNuevo
+POST {{api}}/acceso/iniciar-sesion
+Content-Type: application/json
+
+{ "correo": "nuevo@daemon504.hn", "contrasena": "nuevo1234" }
+
+@tokenNuevo = {{loginNuevo.response.body.token}}
+
 
 ### 1. Ver el equipo → 200 { activo: [4 criaturas], reserva: [1], maximo: 6 }
 GET {{api}}/equipo
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 2. Sin usuario → 401
 GET {{api}}/equipo
 
 ### 3. Usuario nuevo (sin personaje) → 404
 GET {{api}}/equipo
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 
 ### 4. Hacer activa la criatura 3 → 200, queda en la posición 1 (la primera de "activo")
 PATCH {{api}}/equipo/3/activa
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 5. Mandar la criatura 4 a la reserva → 200, activo 3 y reserva 2
 PATCH {{api}}/equipo/4/reserva
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 6. Pasar la criatura 4 al equipo → 200, vuelve al final del equipo
 PATCH {{api}}/equipo/4/equipo
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 7. Pasar la 4 otra vez (ya está en el equipo) → 409
 PATCH {{api}}/equipo/4/equipo
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 8. Hacer activa la 5 (está en reserva) → 409 «Primero pásala al equipo.»
 PATCH {{api}}/equipo/5/activa
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 9. Poner apodo a la criatura 1 → 200, su "nombre" pasa a ser Chispa y "especie" sigue siendo Aquabit
 PATCH {{api}}/equipo/1/apodo
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "apodo": "Chispa" }
 
 ### 10. Apodo de más de 20 caracteres → 400
 PATCH {{api}}/equipo/1/apodo
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "apodo": "Un apodo demasiado largo para caber" }
 
 ### 11. Apodo que no es texto → 400
 PATCH {{api}}/equipo/1/apodo
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "apodo": 123 }
 
 ### 12. Quitar el apodo → 200, el "nombre" vuelve al de la especie
 PATCH {{api}}/equipo/1/apodo
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "apodo": null }
 
 ### 13. Criatura que no existe o es de otro jugador → 404 «Esa criatura no es tuya.»
 PATCH {{api}}/equipo/999/reserva
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 14. Id que no es número → 400
 PATCH {{api}}/equipo/abc/reserva
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 15. Id en cero → 400
 PATCH {{api}}/equipo/0/activa
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 16. Liberar la criatura 5 (reserva) → 200, la reserva queda vacía
 DELETE {{api}}/equipo/5
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 17. Mandar la 1 a la reserva → 200 (quedan 3 activas)
 PATCH {{api}}/equipo/1/reserva
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 18. Mandar la 2 a la reserva → 200 (quedan 2 activas)
 PATCH {{api}}/equipo/2/reserva
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 19. Mandar la 3 a la reserva → 200 (queda 1 activa)
 PATCH {{api}}/equipo/3/reserva
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 20. Mandar la última activa a la reserva → 409 «Tu equipo debe tener al menos una criatura.»
 PATCH {{api}}/equipo/4/reserva
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 21. Liberar la última activa → 409 (el equipo nunca queda vacío)
 DELETE {{api}}/equipo/4
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}

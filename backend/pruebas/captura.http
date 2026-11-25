@@ -7,15 +7,34 @@
 # Ejecutar npm run db:preparar (reinicia las tablas) y npm run dev antes de empezar.
 
 @api = http://localhost:3000/api
-@demo = 00000000-0000-4000-8000-000000000001
-@nuevo = 00000000-0000-4000-8000-000000000002
+
+# Antes de estas pruebas: enviar primero las dos solicitudes de inicio de sesión (guardan el token).
+
+### Iniciar sesión con la cuenta demo (enviar primero)
+# @name loginDemo
+POST {{api}}/acceso/iniciar-sesion
+Content-Type: application/json
+
+{ "correo": "demo@daemon504.hn", "contrasena": "demo1234" }
+
+@tokenDemo = {{loginDemo.response.body.token}}
+
+### Iniciar sesión con la cuenta nueva (enviar primero)
+# @name loginNuevo
+POST {{api}}/acceso/iniciar-sesion
+Content-Type: application/json
+
+{ "correo": "nuevo@daemon504.hn", "contrasena": "nuevo1234" }
+
+@tokenNuevo = {{loginNuevo.response.body.token}}
+
 @encuentro = 1
 @turno = 1
 
 ### 1. Explorar hasta que salga una criatura (tipo "criatura")
 # Copia encuentroId en @encuentro. Si sale otra cosa, vuelve a enviar.
 POST {{api}}/exploracion
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 2. Sin sesion: 401
 POST {{api}}/encuentros/{{encuentro}}/capturar
@@ -25,49 +44,49 @@ Content-Type: application/json
 
 ### 3. Encuentro inexistente: 404
 POST {{api}}/encuentros/999999/capturar
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "turno": 1, "objetoId": 1 }
 
 ### 3b. Crear personaje secundario para comprobar aislamiento por propietario: 201
 POST {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "nombre": "Prueba", "criaturaInicialId": 1 }
 
 ### 4. Encuentro de otro personaje: 404
 POST {{api}}/encuentros/{{encuentro}}/capturar
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "turno": {{turno}}, "objetoId": 1 }
 
 ### 5. Sin turno: 400
 POST {{api}}/encuentros/{{encuentro}}/capturar
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "objetoId": 1 }
 
 ### 6. Sin esfera: 400
 POST {{api}}/encuentros/{{encuentro}}/capturar
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "turno": {{turno}} }
 
 ### 7. Curaball como esfera: 400 (no consume el turno ni el objeto)
 POST {{api}}/encuentros/{{encuentro}}/capturar
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "turno": {{turno}}, "objetoId": 3 }
 
 ### 8. Objeto que no existe: 400
 POST {{api}}/encuentros/{{encuentro}}/capturar
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "turno": {{turno}}, "objetoId": 99 }
@@ -77,38 +96,38 @@ Content-Type: application/json
 # sube @turno al valor de encuentro.turno de la respuesta y vuelve a enviar. Si final es "derrota",
 # el equipo cayó: vuelve al paso 1.
 POST {{api}}/encuentros/{{encuentro}}/capturar
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "turno": {{turno}}, "objetoId": 1 }
 
 ### 10. Repetir el mismo turno: 409
 POST {{api}}/encuentros/{{encuentro}}/capturar
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "turno": {{turno}}, "objetoId": 1 }
 
 ### 11. Tras capturar: la criatura aparece en el equipo (o en la reserva si estaba lleno)
 GET {{api}}/equipo
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 12. Tras capturar: la TamaBall se descontó del inventario
 GET {{api}}/inventario
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 13. Tras capturar: el historial tiene el evento CAPTURA
 GET {{api}}/historial?tipo=CAPTURA
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 14. Desafiar al guardian del bosque: 201
 
 POST {{api}}/encuentros/guardian
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### 15. Capturar a un guardian: 409
 POST {{api}}/encuentros/{{encuentro}}/capturar
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "turno": {{turno}}, "objetoId": 1 }
