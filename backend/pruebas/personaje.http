@@ -8,8 +8,27 @@
 # así que el archivo se puede repetir.
 
 @api = http://localhost:3000/api
-@demo = 00000000-0000-4000-8000-000000000001
-@nuevo = 00000000-0000-4000-8000-000000000002
+
+# Antes de estas pruebas: enviar primero las dos solicitudes de inicio de sesión (guardan el token).
+
+### Iniciar sesión con la cuenta demo (enviar primero)
+# @name loginDemo
+POST {{api}}/acceso/iniciar-sesion
+Content-Type: application/json
+
+{ "correo": "demo@daemon504.hn", "contrasena": "demo1234" }
+
+@tokenDemo = {{loginDemo.response.body.token}}
+
+### Iniciar sesión con la cuenta nueva (enviar primero)
+# @name loginNuevo
+POST {{api}}/acceso/iniciar-sesion
+Content-Type: application/json
+
+{ "correo": "nuevo@daemon504.hn", "contrasena": "nuevo1234" }
+
+@tokenNuevo = {{loginNuevo.response.body.token}}
+
 
 ### 1. Sin usuario → 401
 POST {{api}}/personaje
@@ -19,46 +38,46 @@ Content-Type: application/json
 
 ### 2. Consultar sin tener personaje → 404 «Aún no has creado tu personaje.»
 GET {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 
 ### 3. Nombre de 2 letras → 400 «El nombre debe tener entre 3 y 20 caracteres.»
 POST {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "nombre": "Ki", "criaturaInicialId": 1 }
 
 ### 4. Nombre de 21 letras → 400
 POST {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "nombre": "Nombre demasiado largo", "criaturaInicialId": 1 }
 
 ### 5. Sin nombre → 400
 POST {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "criaturaInicialId": 1 }
 
 ### 6. Criatura que no es inicial (id 4 es salvaje) → 400 «Elige una de las tres criaturas iniciales.»
 POST {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "nombre": "Kira", "criaturaInicialId": 4 }
 
 ### 7. Criatura que no existe → 400
 POST {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "nombre": "Kira", "criaturaInicialId": 999 }
 
 ### 8. Sin criatura → 400
 POST {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "nombre": "Kira" }
@@ -66,51 +85,51 @@ Content-Type: application/json
 ### 9. Crear (intentando regalarse 9999 bytes) → 201, el servidor pone 300 bytes y la zona Valle
 # Esperado: { "nombre": "Kira", "bytes": 300, "zonaId": "valle", "zona": "Valle del Encanto", "sellos": 0, "totalSellos": 4 }
 POST {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "nombre": "  Kira  ", "criaturaInicialId": 2, "bytes": 9999 }
 
 ### 10. Crear un segundo personaje → 409 «Ya tienes un personaje.»
 POST {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "nombre": "Otra", "criaturaInicialId": 1 }
 
 ### 11. El demo (ya tiene personaje) tampoco puede crear otro → 409
 POST {{api}}/personaje
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "nombre": "Otra", "criaturaInicialId": 1 }
 
 ### 12. Consultar → 200 con el mismo resumen
 GET {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 
 ### 13. Renombrar → 200 con el nombre nuevo
 PATCH {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "nombre": "Kira Luz" }
 
 ### 13b. Renombrar con nombre corto → 400
 PATCH {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 Content-Type: application/json
 
 { "nombre": "K" }
 
 ### 13c. Ver que se creó la criatura inicial (Nv 5) y el inventario → equipo con 1 criatura
 GET {{api}}/equipo
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 
 ### 14. Borrar el personaje → 204 (sin contenido)
 DELETE {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}
 
 ### 15. Después de borrar, consultar → 404 otra vez
 GET {{api}}/personaje
-X-Usuario-Id: {{nuevo}}
+Authorization: Bearer {{tokenNuevo}}

@@ -3,7 +3,7 @@
  * Tarea A3-04 · Rama: feature/a3-equipo · Turno 2 (fecha máxima: jueves 19 de noviembre)
  * Commit: "feat(equipo): endpoints de /api/equipo"
  * ═══════════════════════════════════════════════════════════════════ */
-// Rutas de /api/equipo (se montan con identificarJugador y exigirPersonaje en routes/index.js).
+// Rutas de /api/equipo (se montan con requiereSesion y exigirPersonaje en routes/index.js).
 import { Router } from 'express';
 import * as c from '../controllers/equipo.js';
 

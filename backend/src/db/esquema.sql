@@ -1,13 +1,13 @@
 -- ═══════════════════════════════════════════════════════════════════
 -- ESTA PARTE LA TIENE QUE INTEGRAR: Genesis Medina
--- Tarea A3-02 · Rama: feature/a3-base-datos · Turno 1 (fecha máxima: miércoles 18 de noviembre)
--- Commit: "feat(db): modelo de datos del juego"
+-- Tarea A4-01 · Rama: feature/a4-base · Fecha límite: miércoles 25 de noviembre
+-- Commit: "feat(db): contraseña cifrada y tabla de sesiones"
 -- ═══════════════════════════════════════════════════════════════════
--- Modelo de datos de DAEMON 504: 10 tablas de catálogo (datos fijos del juego) y 7 de partida
+-- Modelo de datos de DAEMON 504: 10 tablas de catálogo (datos fijos del juego) y 8 de partida
 -- (lo de cada jugador). npm run db:preparar ejecuta este archivo: borra todo y lo vuelve a crear.
 
 -- Se borra en orden inverso a las dependencias; CASCADE quita también las claves foráneas.
-DROP TABLE IF EXISTS historial, encuentros, inventario, criaturas_jugador, sellos, personajes, usuarios,
+DROP TABLE IF EXISTS historial, encuentros, inventario, criaturas_jugador, sellos, personajes, sesiones, usuarios,
   eventos, tienda, objetos, apariciones, conexiones, guardianes, zonas, criaturas, efectividades, tipos CASCADE;
 
 -- ─────────────────────────────── CATÁLOGO ───────────────────────────────
@@ -120,12 +120,22 @@ CREATE TABLE eventos (
 
 -- ─────────────────────────────── PARTIDA ───────────────────────────────
 
--- Cada jugador. En el Avance 5 el id será el mismo que entrega Supabase Auth.
+-- Cada jugador. La contraseña se guarda cifrada (scrypt, "sal:hash"), nunca en texto plano.
 CREATE TABLE usuarios (
-  id        UUID PRIMARY KEY,
-  correo    TEXT NOT NULL UNIQUE,
-  creado_en TIMESTAMPTZ NOT NULL DEFAULT now()
+  id              UUID PRIMARY KEY,
+  correo          TEXT NOT NULL UNIQUE,
+  contrasena_hash TEXT NOT NULL,
+  creado_en       TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+-- Un token por inicio de sesión (cerrar sesión borra la fila). Vence a los 7 días.
+CREATE TABLE sesiones (
+  token      TEXT PRIMARY KEY,
+  usuario_id UUID NOT NULL REFERENCES usuarios (id) ON DELETE CASCADE,
+  creado_en  TIMESTAMPTZ NOT NULL DEFAULT now(),
+  expira_en  TIMESTAMPTZ NOT NULL
+);
+CREATE INDEX sesiones_usuario_idx ON sesiones (usuario_id);
 
 -- Un personaje (guardián) por usuario. Borrar el personaje borra toda su partida (CASCADE).
 CREATE TABLE personajes (
@@ -214,6 +224,7 @@ ALTER TABLE objetos           ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tienda            ENABLE ROW LEVEL SECURITY;
 ALTER TABLE eventos           ENABLE ROW LEVEL SECURITY;
 ALTER TABLE usuarios          ENABLE ROW LEVEL SECURITY;
+ALTER TABLE sesiones          ENABLE ROW LEVEL SECURITY;
 ALTER TABLE personajes        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE sellos            ENABLE ROW LEVEL SECURITY;
 ALTER TABLE criaturas_jugador ENABLE ROW LEVEL SECURITY;

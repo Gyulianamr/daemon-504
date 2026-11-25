@@ -1,13 +1,16 @@
-// Carga los datos fijos del juego (criaturas, zonas, objetos, tipos y eventos) desde public/data/*.json.
-// Se usa fetch, igual que cuando más adelante pidamos datos a la API.
+/* ═══════════════════════════════════════════════════════════════════
+ * ESTA PARTE LA TIENE QUE INTEGRAR: Genesis Medina
+ * Tarea A4-01 · Rama: feature/a4-base · Fecha límite: miércoles 25 de noviembre
+ * Commit: "feat(datos): leer el catálogo desde la API"
+ * ═══════════════════════════════════════════════════════════════════ */
+// Carga los datos fijos del juego (criaturas, zonas, objetos, tipos y eventos) desde la API: GET /api/catalogo.
+// Como el catálogo no cambia durante la partida, se pide una sola vez.
+import { api } from './api.js';
 
-const ARCHIVOS = ['criaturas', 'zonas', 'objetos', 'tipos', 'eventos'];
 let datosCargados = null;
 
 export async function cargarDatos() {
-  if (datosCargados) return datosCargados; // solo se descargan una vez
-  const respuestas = await Promise.all(ARCHIVOS.map((nombre) => fetch(`/data/${nombre}.json`).then((r) => r.json())));
-  datosCargados = Object.fromEntries(ARCHIVOS.map((nombre, i) => [nombre, respuestas[i]]));
+  if (!datosCargados) datosCargados = await api.get('/catalogo');
   return datosCargados;
 }
 

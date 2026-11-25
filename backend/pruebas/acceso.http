@@ -1,0 +1,72 @@
+# ═══════════════════════════════════════════════════════════════════
+# ESTA PARTE LA TIENE QUE INTEGRAR: Genesis Medina
+# Tarea A4-01 · Rama: feature/a4-base · Fecha límite: miércoles 25 de noviembre
+# Commit: "test(auth): pruebas de acceso y del encabezado Bearer"
+# ═══════════════════════════════════════════════════════════════════
+# Pruebas de /api/acceso. Enviarlas EN ORDEN con REST Client.
+# Antes: npm run db:preparar y npm run dev.
+# Desde ahora TODAS las rutas del jugador usan "Authorization: Bearer {{token}}" (ya no X-Usuario-Id).
+@api = http://localhost:3000/api
+
+### 1. Iniciar sesión con la cuenta demo → 200 { usuario, token }
+# @name login
+POST {{api}}/acceso/iniciar-sesion
+Content-Type: application/json
+
+{ "correo": "demo@daemon504.hn", "contrasena": "demo1234" }
+
+### El token de la respuesta anterior se reutiliza en las demás pruebas
+@token = {{login.response.body.token}}
+
+### 2. Contraseña incorrecta → 401 "Correo o contraseña incorrectos."
+POST {{api}}/acceso/iniciar-sesion
+Content-Type: application/json
+
+{ "correo": "demo@daemon504.hn", "contrasena": "otra-clave-1234" }
+
+### 3. Registrar una cuenta nueva → 201 { usuario, token }
+POST {{api}}/acceso/registro
+Content-Type: application/json
+
+{ "correo": "prueba@daemon504.hn", "contrasena": "prueba1234" }
+
+### 4. Registrar el mismo correo → 409
+POST {{api}}/acceso/registro
+Content-Type: application/json
+
+{ "correo": "prueba@daemon504.hn", "contrasena": "prueba1234" }
+
+### 5. Contraseña de menos de 8 caracteres → 400
+POST {{api}}/acceso/registro
+Content-Type: application/json
+
+{ "correo": "corta@daemon504.hn", "contrasena": "1234" }
+
+### 6. Correo sin formato válido → 400
+POST {{api}}/acceso/registro
+Content-Type: application/json
+
+{ "correo": "sin-arroba", "contrasena": "prueba1234" }
+
+### 7. Sesión con token → 200 { usuario }
+GET {{api}}/acceso/sesion
+Authorization: Bearer {{token}}
+
+### 8. Sesión sin token → 401
+GET {{api}}/acceso/sesion
+
+### 9. Una ruta del jugador con token → 200
+GET {{api}}/personaje
+Authorization: Bearer {{token}}
+
+### 10. La misma ruta solo con X-Usuario-Id → 401 (ya no se acepta)
+GET {{api}}/personaje
+X-Usuario-Id: 00000000-0000-4000-8000-000000000001
+
+### 11. Cerrar sesión → 204
+POST {{api}}/acceso/cerrar-sesion
+Authorization: Bearer {{token}}
+
+### 12. El mismo token después de cerrar sesión → 401
+GET {{api}}/acceso/sesion
+Authorization: Bearer {{token}}

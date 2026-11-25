@@ -3,7 +3,7 @@
  * Tarea A3-03 · Rama: feature/a3-jugador · Turno 1 (fecha máxima: miércoles 18 de noviembre)
  * Commit: "feat(api): identificar al jugador y exigir personaje"
  * ═══════════════════════════════════════════════════════════════════ */
-// Va después de identificarJugador: busca el personaje del usuario y deja su id en req.personajeId.
+// Va después de requiereSesion: busca el personaje del usuario y deja su id en req.personajeId.
 // Los servicios usan SIEMPRE req.personajeId, nunca un id que venga en el body.
 import { pool } from '../db/pool.js';
 import * as personajes from '../models/personajes.js';

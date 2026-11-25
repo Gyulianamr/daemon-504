@@ -5,19 +5,39 @@
 # ═══════════════════════════════════════════════════════════════════
 # Pruebas de A3-08: enviar "Explorar" varias veces; cuando salga una criatura, explorar y moverse dan 409.
 @api = http://localhost:3000/api
-@demo = 00000000-0000-4000-8000-000000000001
+
+# Antes de estas pruebas: enviar primero las dos solicitudes de inicio de sesión (guardan el token).
+
+### Iniciar sesión con la cuenta demo (enviar primero)
+# @name loginDemo
+POST {{api}}/acceso/iniciar-sesion
+Content-Type: application/json
+
+{ "correo": "demo@daemon504.hn", "contrasena": "demo1234" }
+
+@tokenDemo = {{loginDemo.response.body.token}}
+
+### Iniciar sesión con la cuenta nueva (enviar primero)
+# @name loginNuevo
+POST {{api}}/acceso/iniciar-sesion
+Content-Type: application/json
+
+{ "correo": "nuevo@daemon504.hn", "contrasena": "nuevo1234" }
+
+@tokenNuevo = {{loginNuevo.response.body.token}}
+
 
 ### Explorar → 200 (nada, objeto, evento o criatura)
 POST {{api}}/exploracion
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### Con criatura pendiente: explorar otra vez → 409
 POST {{api}}/exploracion
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 
 ### Con criatura pendiente: moverse → 409
 POST {{api}}/mundo/mover
-X-Usuario-Id: {{demo}}
+Authorization: Bearer {{tokenDemo}}
 Content-Type: application/json
 
 { "destino": "pradera" }
