@@ -1,5 +1,11 @@
+/* ═══════════════════════════════════════════════════════════════════
+ * ESTA PARTE LA TIENE QUE INTEGRAR: Genesis Medina
+ * Tarea A4-01 · Rama: feature/a4-base · Fecha límite: miércoles 25 de noviembre
+ * Commit: "feat(acceso): sesión con token en el Front-End"
+ * ═══════════════════════════════════════════════════════════════════ */
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import Mensaje from '../../components/Mensaje.jsx';
+import { EVENTO_SESION_VENCIDA } from '../api.js';
 import {
   cerrarSesion as cerrarSesionServicio,
   iniciarSesion as iniciarSesionServicio,
@@ -64,6 +70,16 @@ export function SesionProvider({ children }) {
       activo = false;
     };
   }, [refrescar]);
+
+  // Si la API responde 401 con una sesión guardada, api.js la borra y avisa: se vuelve a Acceso.
+  useEffect(() => {
+    const cerrarLocal = () => {
+      setUsuario(null);
+      setPersonaje(null);
+    };
+    window.addEventListener(EVENTO_SESION_VENCIDA, cerrarLocal);
+    return () => window.removeEventListener(EVENTO_SESION_VENCIDA, cerrarLocal);
+  }, []);
 
   const valor = {
     usuario,

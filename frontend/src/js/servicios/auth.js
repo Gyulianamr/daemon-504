@@ -1,88 +1,63 @@
-import { conEstado, fallar, resumenPersonaje } from '../partida.js';
+/* ═══════════════════════════════════════════════════════════════════
+ * ESTA PARTE LA TIENE QUE INTEGRAR: Genesis Medina
+ * Tarea A4-01 · Rama: feature/a4-base · Fecha límite: miércoles 25 de noviembre
+ * Commit: "feat(acceso): sesión con token en el Front-End"
+ * ═══════════════════════════════════════════════════════════════════ */
+// Registro, inicio y cierre de sesión contra la API (/api/acceso).
+// La API responde { usuario: { id, correo }, token }; se guarda en el navegador y api.js envía el token en cada petición.
+import { api, ErrorJuego, leerSesion, guardarSesion, borrarSesion } from '../api.js';
 
-const LONGITUD_MINIMA_CONTRASENA = 8;
+const CORREO_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const SIN_SESION = { usuario: null, personaje: null };
 
-function validarCredenciales(correo, contrasena) {
-  if (!correo.includes('@') || contrasena.length < LONGITUD_MINIMA_CONTRASENA) {
-    fallar(400, 'Introduce un correo válido y una contraseña de al menos 8 caracteres.');
+// Validación rápida en el navegador para avisar sin esperar al servidor (el servidor vuelve a validar).
+function validar(correo, contrasena) {
+  if (!CORREO_VALIDO.test(correo)) throw new ErrorJuego(400, 'Escribe un correo válido.');
+  if (!contrasena || contrasena.length < 8) throw new ErrorJuego(400, 'La contraseña debe tener al menos 8 caracteres.');
+}
+
+// El personaje puede no existir todavía (404): en ese caso la app envía a la pantalla de crear personaje.
+async function buscarPersonaje() {
+  try {
+    return await api.get('/personaje');
+  } catch (err) {
+    if (err.status === 404) return null;
+    throw err;
   }
 }
 
-function obtenerCorreoNormalizado(correo) {
-  return correo.trim().toLowerCase();
-}
-
-function crearRespuestaSesion(datos, estado) {
-  const usuario = estado.usuarios.find((usuarioActual) => usuarioActual.id === estado.sesion);
-
-  if (!usuario) {
-    return { usuario: null, personaje: null };
+// Sesión guardada en el navegador + resumen de su personaje (GET /api/personaje).
+export async function obtenerSesion() {
+  const sesion = leerSesion();
+  if (!sesion?.token) return SIN_SESION;
+  try {
+    return { usuario: sesion.usuario, personaje: await buscarPersonaje() };
+  } catch (err) {
+    if (err.status === 401) return SIN_SESION; // api.js ya borró la sesión vencida
+    throw err;
   }
-
-  const partida = estado.partidas[usuario.id];
-
-  return {
-    usuario: { id: usuario.id, correo: usuario.correo },
-    personaje: partida ? resumenPersonaje(datos, partida) : null,
-  };
 }
 
-export function obtenerSesion() {
-  return conEstado(({ datos, estado }) => {
-    if (!estado.sesion) {
-      return { usuario: null, personaje: null };
-    }
-
-    return crearRespuestaSesion(datos, estado);
-  });
+async function entrar(ruta, correo, contrasena) {
+  validar(correo, contrasena);
+  const { usuario, token } = await api.post(ruta, { correo, contrasena });
+  guardarSesion({ usuario, token });
+  return { usuario, personaje: await buscarPersonaje() };
 }
 
-export async function iniciarSesion(correo, contrasena) {
-  validarCredenciales(correo, contrasena);
-  const correoNormalizado = obtenerCorreoNormalizado(correo);
+// POST /api/acceso/iniciar-sesion
+export const iniciarSesion = (correo, contrasena) => entrar('/acceso/iniciar-sesion', correo, contrasena);
 
-  return conEstado(({ datos, estado }) => {
-    const usuario = estado.usuarios.find((usuarioActual) =>
-      usuarioActual.correo.toLowerCase() === correoNormalizado &&
-      usuarioActual.contrasena === contrasena
-    );
+// POST /api/acceso/registro
+export const registrarse = (correo, contrasena) => entrar('/acceso/registro', correo, contrasena);
 
-    if (!usuario) {
-      fallar(401, 'El correo o la contraseña son incorrectos.');
-    }
-
-    estado.sesion = usuario.id;
-    return crearRespuestaSesion(datos, estado);
-  });
-}
-
-export async function registrarse(correo, contrasena) {
-  validarCredenciales(correo, contrasena);
-  const correoNormalizado = obtenerCorreoNormalizado(correo);
-
-  return conEstado(({ datos, estado }) => {
-    const usuarioExistente = estado.usuarios.find((usuarioActual) =>
-      usuarioActual.correo.toLowerCase() === correoNormalizado
-    );
-
-    if (usuarioExistente) {
-      fallar(409, 'Ya existe una cuenta con ese correo.');
-    }
-
-    const usuario = {
-      id: `u-${Date.now()}-${estado.usuarios.length}`,
-      correo: correoNormalizado,
-      contrasena,
-    };
-
-    estado.usuarios.push(usuario);
-    estado.sesion = usuario.id;
-    return crearRespuestaSesion(datos, estado);
-  });
-}
-
+// POST /api/acceso/cerrar-sesion: el servidor borra el token; la sesión local se borra aunque la API no responda.
 export async function cerrarSesion() {
-  return conEstado(({ estado }) => {
-    estado.sesion = null;
-  });
+  try {
+    await api.post('/acceso/cerrar-sesion');
+  } catch {
+    // sin conexión o token ya vencido: igual se cierra la sesión local
+  } finally {
+    borrarSesion();
+  }
 }
