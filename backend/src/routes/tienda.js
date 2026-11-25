@@ -3,7 +3,7 @@
  * Tarea A3-13 · Rama: feature/a3-tienda · Turno 6 (fecha máxima: lunes 23 de noviembre)
  * Commit: "feat(tienda): endpoints de /api/tienda y /api/santuario"
  * ═══════════════════════════════════════════════════════════════════ */
-// Rutas de /api/tienda (se montan con identificarJugador y exigirPersonaje en routes/index.js).
+// Rutas de /api/tienda (se montan con requiereSesion y exigirPersonaje en routes/index.js).
 import { Router } from 'express';
 import * as c from '../controllers/tienda.js';
 
