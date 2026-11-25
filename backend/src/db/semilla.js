@@ -1,12 +1,13 @@
 /* ═══════════════════════════════════════════════════════════════════
  * ESTA PARTE LA TIENE QUE INTEGRAR: Genesis Medina
- * Tarea A3-02 · Rama: feature/a3-base-datos · Turno 1 (fecha máxima: miércoles 18 de noviembre)
- * Commit: "feat(db): semilla con catálogo y usuarios de prueba"
+ * Tarea A4-01 · Rama: feature/a4-base · Fecha límite: miércoles 25 de noviembre
+ * Commit: "feat(db): contraseña cifrada y tabla de sesiones"
  * ═══════════════════════════════════════════════════════════════════ */
-// npm run db:preparar → borra y crea las 17 tablas (esquema.sql) y carga el catálogo desde los
+// npm run db:preparar → borra y crea las 18 tablas (esquema.sql) y carga el catálogo desde los
 // mismos JSON del Front-End (frontend/public/data) más los dos usuarios de prueba. Todo en una transacción.
 import { readFile } from 'node:fs/promises';
 import { pool, transaccion } from './pool.js';
+import { hashContrasena } from '../services/contrasenas.js';
 
 const DATOS = new URL('../../../frontend/public/data/', import.meta.url);
 const leerJson = async (nombre) => JSON.parse(await readFile(new URL(`${nombre}.json`, DATOS), 'utf8'));
@@ -103,8 +104,9 @@ async function cargarCatalogo(db, { criaturas, zonas, objetos, tipos, eventos })
 
 // demo@daemon504.hn con la partida de partida-demo.json; nuevo@daemon504.hn sin personaje.
 async function cargarUsuarios(db, demo) {
-  await db.query('INSERT INTO usuarios (id, correo) VALUES ($1, $2), ($3, $4)', [
-    USUARIO_DEMO, demo.usuario.correo, USUARIO_NUEVO, 'nuevo@daemon504.hn',
+  await db.query('INSERT INTO usuarios (id, correo, contrasena_hash) VALUES ($1, $2, $3), ($4, $5, $6)', [
+    USUARIO_DEMO, demo.usuario.correo, hashContrasena('demo1234'),
+    USUARIO_NUEVO, 'nuevo@daemon504.hn', hashContrasena('nuevo1234'),
   ]);
 
   const p = demo.partida;
