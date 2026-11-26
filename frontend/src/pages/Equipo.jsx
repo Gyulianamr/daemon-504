@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import {
-  listarEquipo,
-  hacerActiva,
-  moverAReserva,
-  moverAlEquipo,
-} from '../js/servicios/equipo.js';
 
+/* ═══════════════════════════════════════════════════════════════════
+ * ESTA PARTE LA TIENE QUE INTEGRAR: Jatniel Oliva
+ * Tarea A4-06 · Rama: feature/a4-equipo · Fecha límite: miércoles 25 de noviembre
+ * Commit: "feat(equipo): poner apodo y liberar criaturas"
+ * ═══════════════════════════════════════════════════════════════════ */
+import { useState } from 'react';
+import { listarEquipo, hacerActiva, moverAReserva, moverAlEquipo, cambiarApodo, liberar } from '../js/servicios/equipo.js';
 import { useCargar } from '../js/utils/useCargar.js';
 import TarjetaCriatura from '../components/TarjetaCriatura.jsx';
 import Boton from '../components/Boton.jsx';
@@ -13,26 +13,25 @@ import Mensaje from '../components/Mensaje.jsx';
 import Cargando from '../components/Cargando.jsx';
 import '../css/equipo.css';
 
-// Muestra las criaturas activas y las que están en reserva.
+// Equipo activo (máximo 6) y reserva. La criatura ★ es la primera en combatir.
+// Cada criatura se puede mover, renombrar con un apodo o liberar; todo lo valida el servidor.
 export default function Equipo() {
   const { datos, cargando, error, recargar } = useCargar(listarEquipo);
-
   const [ocupado, setOcupado] = useState(false);
   const [aviso, setAviso] = useState('');
+  const [apodo, setApodo] = useState(null); // { id, texto } mientras se escribe un apodo
+  const [porLiberar, setPorLiberar] = useState(null); // id de la criatura que espera confirmación
 
-  // Mientras se cargan los datos, mostramos el componente de carga.
   if (cargando && !datos) return <Cargando />;
-
-  // Si ocurre un error al consultar el equipo, lo mostramos.
   if (error) return <Mensaje tipo="error">{error.message}</Mensaje>;
 
-  // Ejecuta una acción sobre una criatura y actualiza la pantalla.
-  async function cambiar(servicio, id) {
+  async function cambiar(servicio, id, ...extra) {
     setOcupado(true);
     setAviso('');
-
     try {
-      await servicio(id);
+      await servicio(id, ...extra);
+      setApodo(null);
+      setPorLiberar(null);
       await recargar();
     } catch (err) {
       setAviso(err.message);
@@ -41,85 +40,67 @@ export default function Equipo() {
     }
   }
 
+  function guardarApodo(evento) {
+    evento.preventDefault(); // evita que el formulario recargue la página
+    cambiar(cambiarApodo, apodo.id, apodo.texto);
+  }
+
+  // Botones de apodo y liberar, iguales para el equipo y la reserva.
+  function opciones(c) {
+    if (apodo?.id === c.id) {
+      return (
+        <form className="equipo__apodo" onSubmit={guardarApodo}>
+          <input aria-label={`Apodo de ${c.especie}`} maxLength={15} placeholder={c.especie} value={apodo.texto} onChange={(e) => setApodo({ id: c.id, texto: e.target.value })} />
+          <Boton pequeno type="submit" disabled={ocupado}>Guardar</Boton>
+          <Boton pequeno variante="secundario" onClick={() => setApodo(null)}>Cancelar</Boton>
+        </form>
+      );
+    }
+    if (porLiberar === c.id) {
+      return (
+        <div className="equipo__confirmar">
+          <span>¿Liberar a {c.nombre}? No se puede deshacer.</span>
+          <Boton pequeno variante="peligro" onClick={() => cambiar(liberar, c.id)} disabled={ocupado}>Sí, liberar</Boton>
+          <Boton pequeno variante="secundario" onClick={() => setPorLiberar(null)}>No</Boton>
+        </div>
+      );
+    }
+    return (
+      <>
+        <Boton pequeno variante="secundario" onClick={() => setApodo({ id: c.id, texto: c.apodo ?? '' })} disabled={ocupado}>Apodo</Boton>
+        <Boton pequeno variante="peligro" onClick={() => setPorLiberar(c.id)} disabled={ocupado}>Liberar</Boton>
+      </>
+    );
+  }
+
   return (
     <div className="pila">
       <div className="encabezado-pagina">
         <h1>Equipo</h1>
-
-        <span className="texto-suave">
-          {datos.activo.length}/{datos.maximo} criaturas activas
-        </span>
+        <span className="texto-suave">{datos.activo.length}/{datos.maximo} criaturas activas</span>
       </div>
+      <Mensaje tipo="error" alCerrar={() => setAviso('')}>{aviso}</Mensaje>
 
-      <Mensaje
-        tipo="error"
-        alCerrar={() => setAviso('')}
-      >
-        {aviso}
-      </Mensaje>
-
-      {/* Criaturas que forman parte del equipo activo */}
       <div className="rejilla rejilla--3">
-        {datos.activo.map((criatura) => (
-          <TarjetaCriatura
-            key={criatura.id}
-            criatura={criatura}
-            activa={criatura.posicion === 1}
-          >
-            {criatura.posicion !== 1 && (
-              <Boton
-                pequeno
-                onClick={() => cambiar(hacerActiva, criatura.id)}
-                disabled={ocupado}
-              >
-                Hacer activa
-              </Boton>
-            )}
-
-            <Boton
-              pequeno
-              variante="secundario"
-              onClick={() => cambiar(moverAReserva, criatura.id)}
-              disabled={ocupado}
-            >
-              A reserva
-            </Boton>
+        {datos.activo.map((c) => (
+          <TarjetaCriatura key={c.id} criatura={c} activa={c.posicion === 1}>
+            {c.posicion !== 1 && <Boton pequeno onClick={() => cambiar(hacerActiva, c.id)} disabled={ocupado}>Hacer activa</Boton>}
+            <Boton pequeno variante="secundario" onClick={() => cambiar(moverAReserva, c.id)} disabled={ocupado}>A reserva</Boton>
+            {opciones(c)}
           </TarjetaCriatura>
         ))}
-
-        {/* Espacios disponibles hasta completar las seis posiciones */}
-        {Array.from(
-          { length: datos.maximo - datos.activo.length },
-          (_, i) => (
-            <div key={i} className="equipo__libre">
-              Espacio libre
-            </div>
-          )
-        )}
+        {Array.from({ length: datos.maximo - datos.activo.length }, (_, i) => (
+          <div key={i} className="equipo__libre">Espacio libre</div>
+        ))}
       </div>
 
-      {/* Criaturas que actualmente están en reserva */}
       <h2 className="equipo__subtitulo">Reserva</h2>
-
-      {datos.reserva.length === 0 && (
-        <p className="texto-suave">
-          No tienes criaturas en reserva.
-        </p>
-      )}
-
+      {datos.reserva.length === 0 && <p className="texto-suave">No tienes criaturas en reserva.</p>}
       <div className="rejilla rejilla--3">
-        {datos.reserva.map((criatura) => (
-          <TarjetaCriatura
-            key={criatura.id}
-            criatura={criatura}
-          >
-            <Boton
-              pequeno
-              onClick={() => cambiar(moverAlEquipo, criatura.id)}
-              disabled={ocupado || datos.activo.length >= datos.maximo}
-            >
-              Pasar al equipo
-            </Boton>
+        {datos.reserva.map((c) => (
+          <TarjetaCriatura key={c.id} criatura={c}>
+            <Boton pequeno onClick={() => cambiar(moverAlEquipo, c.id)} disabled={ocupado || datos.activo.length >= datos.maximo}>Pasar al equipo</Boton>
+            {opciones(c)}
           </TarjetaCriatura>
         ))}
       </div>
