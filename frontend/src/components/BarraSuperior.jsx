@@ -12,7 +12,7 @@ export default function BarraSuperior() {
         <p className="barra-superior__titulo">DAEMON 504</p>
         <dl className="barra-superior__datos">
           <div className="barra-superior__dato">
-            <dt>Guardián</dt>
+            <dt>Jugador</dt>
             <dd>{personaje.nombre}</dd>
           </div>
           <div className="barra-superior__dato">

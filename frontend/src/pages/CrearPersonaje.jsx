@@ -7,7 +7,7 @@ import Boton from '../components/Boton.jsx';
 import Mensaje from '../components/Mensaje.jsx';
 import '../css/crear-personaje.css';
 
-// Nombre del guardián + elección de una de las tres criaturas iniciales.
+// Nombre del jugador + elección de una de las tres criaturas iniciales.
 export default function CrearPersonaje() {
   const navegar = useNavigate();
   const { refrescar } = useSesion();
@@ -41,11 +41,11 @@ export default function CrearPersonaje() {
   return (
     <main className="crear">
       <div>
-        <h1>Crea tu guardián</h1>
+        <h1>Crea tu jugador</h1>
         <p className="texto-suave">Los sellos del Umbral se debilitan. Elige un nombre y tu primera criatura.</p>
       </div>
       <div className="campo crear__nombre">
-        <label htmlFor="nombre">Nombre del guardián</label>
+        <label htmlFor="nombre">Nombre del jugador</label>
         <input id="nombre" maxLength={20} value={nombre} onChange={(e) => setNombre(e.target.value)} />
       </div>
       <div className="rejilla rejilla--3">

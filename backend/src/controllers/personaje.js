@@ -10,7 +10,7 @@ import { enteroPositivo, textoRequerido } from '../middleware/validar.js';
 
 // POST /api/personaje { nombre, criaturaInicialId } → 201
 export async function crear(req, res) {
-  const nombre = textoRequerido(req.body?.nombre, 'Escribe el nombre de tu guardián.');
+  const nombre = textoRequerido(req.body?.nombre, 'Escribe el nombre de tu jugador.');
   const criaturaInicialId = enteroPositivo(req.body?.criaturaInicialId, 'Elige una de las tres criaturas iniciales.');
   res.status(201).json(await servicio.crearPersonaje(req.usuarioId, nombre, criaturaInicialId));
 }
@@ -22,7 +22,7 @@ export async function consultar(req, res) {
 
 // PATCH /api/personaje { nombre }
 export async function renombrar(req, res) {
-  const nombre = textoRequerido(req.body?.nombre, 'Escribe el nuevo nombre de tu guardián.');
+  const nombre = textoRequerido(req.body?.nombre, 'Escribe el nuevo nombre de tu jugador.');
   res.json(await servicio.renombrarPersonaje(req.personajeId, nombre));
 }
 
