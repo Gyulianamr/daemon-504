@@ -1,76 +1,17 @@
-// Inventario: consulta cantidades y permite usar objetos de curación.
-import { conPartida, fallar } from '../partida.js';
-import { buscarObjeto } from '../datos.js';
-import { vistaCriatura } from './equipo.js';
-import { registrar } from './historial.js';
 
-// Futuro: GET /api/inventario
-export function listarInventario() {
-  return conPartida(({ datos, partida }) =>
-    datos.objetos
-      .map((objeto) => ({
-        ...objeto,
-        cantidad: partida.inventario[objeto.id] || 0,
-      }))
-      .filter((objeto) => objeto.cantidad > 0),
-  );
-}
+/* ═══════════════════════════════════════════════════════════════════
+ * ESTA PARTE LA TIENE QUE INTEGRAR: Jatniel Oliva
+ * Tarea A4-06 · Rama: feature/a4-equipo · Fecha límite: miércoles 25 de noviembre
+ * Commit: "feat(inventario): inventario con la API"
+ * ═══════════════════════════════════════════════════════════════════ */
+// Inventario. El servidor comprueba que el jugador tenga el objeto y que la criatura sea suya.
+import { api } from '../api.js';
 
-// Futuro: POST /api/inventario/usar { objetoId, criaturaId }
-export function usarObjeto(objetoId, criaturaId) {
-  return conPartida(({ datos, partida }) => {
+// GET /api/inventario → objetos con su cantidad
+export const listarInventario = () => api.get('/inventario');
 
-    if (partida.encuentro) {
-      fallar(
-        409,
-        'Durante un combate usa los objetos desde la pantalla de combate.',
-      );
-    }
-
-    const objeto = buscarObjeto(datos, objetoId);
-
-    if (!objeto || objeto.tipo !== 'curacion') {
-      fallar(400, 'Ese objeto no se puede usar aquí.');
-    }
-
-    if (!partida.inventario[objetoId]) {
-      fallar(409, `No tienes ${objeto.nombre}.`);
-    }
-
-    const criatura = partida.criaturas.find(
-      (c) => c.id === criaturaId,
-    );
-
-    if (!criatura) {
-      fallar(404, 'Esa criatura no es tuya.');
-    }
-
-    const { nombre, vidaMax } = vistaCriatura(datos, criatura);
-
-    if (criatura.vida === 0) {
-      fallar(
-        409,
-        `${nombre} está debilitada: llévala al santuario.`,
-      );
-    }
-
-    if (criatura.vida === vidaMax) {
-      fallar(409, `${nombre} ya tiene la vida completa.`);
-    }
-
-    criatura.vida = Math.min(
-      vidaMax,
-      criatura.vida + objeto.valor,
-    );
-
-    partida.inventario[objetoId]--;
-
-    registrar(
-      partida,
-      'CURACION',
-      `Usaste ${objeto.nombre} en ${nombre}.`,
-    );
-
-    return `${nombre} ahora tiene ${criatura.vida}/${vidaMax} HP.`;
-  });
+// POST /api/inventario/usar { objetoId, criaturaId } → devuelve el mensaje para mostrar
+export async function usarObjeto(objetoId, criaturaId) {
+  const { mensaje } = await api.post('/inventario/usar', { objetoId, criaturaId });
+  return mensaje;
 }
