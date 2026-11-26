@@ -13,3 +13,30 @@
   color: var(--color-principal);
   margin-top: var(--espacio-1);
 }
+
+
+/* Formulario de apodo y confirmación de liberar: ocupan todo el ancho de la tarjeta */
+.equipo__apodo,
+.equipo__confirmar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.equipo__apodo input {
+  flex: 1;
+  min-width: 120px;
+  padding: 6px 10px;
+  border: 1.5px solid var(--color-borde);
+  border-radius: 8px;
+  font: inherit;
+  font-size: var(--texto-sm);
+}
+
+.equipo__confirmar span {
+  flex-basis: 100%;
+  font-size: var(--texto-sm);
+  color: var(--color-error);
+}
