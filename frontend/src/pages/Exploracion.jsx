@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { obtenerZonaActual, moverA } from '../js/servicios/mundo.js';
+import { obtenerProgreso } from '../js/servicios/progreso.js';
 import { desafiarGuardian } from '../js/servicios/combate.js';
 import { useCargar } from '../js/utils/useCargar.js';
 import { useSesion } from '../js/sesion/SesionContext.jsx';
@@ -8,7 +9,9 @@ import Boton from '../components/Boton.jsx';
 import Cargando from '../components/Cargando.jsx';
 import Destinos from '../components/Destinos.jsx';
 import Mensaje from '../components/Mensaje.jsx';
+import PanelCamino from '../components/PanelCamino.jsx';
 import PanelExploracion from '../components/PanelExploracion.jsx';
+import SiguienteObjetivo from '../components/SiguienteObjetivo.jsx';
 import Tarjeta from '../components/Tarjeta.jsx';
 import '../css/exploracion.css';
 
@@ -16,6 +19,7 @@ export default function Exploracion() {
   const navegar = useNavigate();
   const { refrescar } = useSesion();
   const { datos, cargando, error, recargar } = useCargar(obtenerZonaActual);
+  const { datos: progreso, error: errorProgreso, recargar: recargarProgreso } = useCargar(obtenerProgreso);
   const [ocupado, setOcupado] = useState(false);
   const [aviso, setAviso] = useState('');
 
@@ -28,7 +32,7 @@ export default function Exploracion() {
 
   
   async function actualizar() {
-    await recargar();
+    await Promise.all([recargar(), recargarProgreso()]);
     await refrescar();
   }
 
@@ -71,7 +75,7 @@ export default function Exploracion() {
         <span className="texto-suave">{zona.nombre}</span>
       </div>
 
-      <Mensaje tipo="error">{aviso || (error && error.message)}</Mensaje>
+      <Mensaje tipo="error">{aviso || (error && error.message) || (errorProgreso && errorProgreso.message)}</Mensaje>
 
       {combatePendiente && (
         <Mensaje tipo="aviso">
@@ -86,6 +90,8 @@ export default function Exploracion() {
 
       <div className="exploracion">
         <div className="exploracion__principal">
+          {progreso && <SiguienteObjetivo siguiente={progreso.siguiente} />}
+
           <Tarjeta titulo={zona.nombre} subtitulo={`Niveles ${zona.nivelMin}–${zona.nivelMax}`}>
             <div className="pila">
               <p>{zona.descripcion}</p>
@@ -127,8 +133,10 @@ export default function Exploracion() {
           )}
 
           <Tarjeta titulo="Destinos">
-            <Destinos destinos={destinos} alMover={viajar} ocupado={bloqueado} />
+            <Destinos destinos={destinos} zonas={progreso?.zonas} alMover={viajar} ocupado={bloqueado} />
           </Tarjeta>
+
+          {progreso && <PanelCamino progreso={progreso} />}
         </div>
       </div>
     </div>
