@@ -69,16 +69,16 @@ export default function Combate() {
       let respuesta;
       switch (accion) {
         case 'atacar':
-          respuesta = await atacar(encuentro.turno);
+          respuesta = await atacar(encuentro.id, encuentro.turno);
           break;
         case 'curar':
-          respuesta = await usarCuraball(encuentro.turno);
+          respuesta = await usarCuraball(encuentro.id,encuentro.turno);
           break;
         case 'huir':
-          respuesta = await huir(encuentro.turno);
+          respuesta = await huir(encuentro.id,encuentro.turno);
           break;
         case 'capturar':
-          respuesta = await capturar(encuentro.turno, esferaId);
+          respuesta = await capturar(encuentro.id,encuentro.turno, esferaId);
           break;
         default:
           throw new Error('Acción de combate no válida.');
