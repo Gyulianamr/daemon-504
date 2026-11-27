@@ -1,0 +1,58 @@
+.camino {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.camino__item {
+  padding: var(--espacio-1) var(--espacio-2);
+  background: var(--color-tarjeta);
+  border: 1px solid var(--color-borde);
+  border-left: 4px solid var(--color-borde);
+  border-radius: var(--radio);
+}
+
+.camino__item--actual {
+  border-left-color: var(--color-principal);
+}
+
+.camino__item--desbloqueada {
+  border-left-color: var(--color-exito);
+}
+
+.camino__item--bloqueada {
+  background: var(--color-suave);
+  border-left-color: var(--color-aviso);
+}
+
+.camino__fila {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--espacio-1);
+}
+
+.camino__nombre {
+  font-weight: 600;
+  color: var(--color-principal);
+}
+
+.camino__estado {
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+
+.camino__estado--actual {
+  color: var(--color-principal);
+}
+
+.camino__estado--desbloqueada {
+  color: var(--color-exito);
+}
+
+.camino__estado--bloqueada {
+  color: var(--color-aviso);
+}
