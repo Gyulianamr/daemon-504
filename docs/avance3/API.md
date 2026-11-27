@@ -338,3 +338,50 @@ probabilidad = ((1 − vida actual ÷ vida máxima) × 0.7 + 0.1) × facilidad d
 ## 13. Cómo ejecutar el Back-End
 
 Ver `backend/README.md`.
+
+## 14. Progreso entre zonas
+
+### GET /api/progreso
+
+Dice qué le falta al jugador para llegar a la siguiente zona. Usa solo reglas que ya existen: no cambia los desbloqueos ni usa un nivel del jugador. El jugador sale de la sesión: no se envían ids.
+
+**Requiere:** `Authorization: Bearer <token>` y personaje creado.
+
+**Respuestas:** `200` con el progreso · `401` sin sesión o con token inválido · `404` sin personaje.
+
+```json
+{
+  "sellos": { "obtenidos": 1, "total": 4 },
+  "zonaActual": { "id": "bosque", "nombre": "Bosque del Guerrero" },
+  "zonas": [
+    {
+      "id": "montana",
+      "nombre": "Montaña de la Tormenta",
+      "tipo": "zona",
+      "estado": "bloqueada",
+      "bloqueada": true,
+      "requisito": "Sello del Bosque",
+      "guardian": { "id": "g2", "nombre": "…", "nivel": 9, "zonaId": "bosque", "zonaNombre": "Bosque del Guerrero" }
+    }
+  ],
+  "siguiente": {
+    "zona": { "id": "montana", "nombre": "Montaña de la Tormenta" },
+    "selloFaltante": "Sello del Bosque",
+    "guardian": { "id": "g2", "nivel": 9, "zonaId": "bosque", "zonaNombre": "Bosque del Guerrero" },
+    "estasEnLaZonaDelGuardian": true,
+    "accion": "Desafía al guardián de nivel 9 para conseguir el Sello del Bosque."
+  },
+  "combatePendiente": false
+}
+```
+
+| Campo | Significado |
+|---|---|
+| `sellos` | Sellos que tiene el jugador y el total del juego |
+| `zonaActual` | Zona donde está el jugador |
+| `zonas[].estado` | `actual`, `desbloqueada` o `bloqueada` |
+| `zonas[].requisito` | Nombre del sello que pide; solo si la zona está bloqueada |
+| `zonas[].guardian` | Guardián que entrega ese sello y la zona donde está; `null` si la zona no está bloqueada |
+| `siguiente` | La primera zona bloqueada y lo que falta para abrirla; `null` si ya tiene todos los sellos |
+| `siguiente.accion` | Texto para mostrar: «Termina tu combate», «Desafía al guardián…» o «Ve a <zona> y desafía…» |
+| `combatePendiente` | `true` si hay un combate sin terminar |

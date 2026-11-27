@@ -19,6 +19,7 @@ import exploracion from './exploracion.js';
 import encuentros from './encuentros.js';
 import tienda from './tienda.js';
 import santuario from './santuario.js';
+import progreso from './progreso.js';
 
 
 
@@ -39,6 +40,7 @@ router.use('/equipo', jugador, equipo);
 router.use('/personaje', personaje); // POST solo pide usuario; GET, PATCH y DELETE piden también personaje
 router.use('/inventario', jugador, inventario);
 router.use('/mundo', jugador, mundo);
+router.use('/progreso', jugador, progreso);
 router.use('/exploracion', jugador, exploracion);
 router.use('/encuentros', jugador, encuentros);
 router.use('/tienda', jugador, tienda);

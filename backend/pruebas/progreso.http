@@ -1,0 +1,59 @@
+# ═══════════════════════════════════════════════════════════════════
+# ESTA PARTE LA TIENE QUE INTEGRAR: Dinora Padilla
+# Tarea A4-12 · Rama: feature/a4-progreso · Fecha límite: miércoles 25 de noviembre
+# Commit: "test(progreso): pruebas de GET /api/progreso"
+# ═══════════════════════════════════════════════════════════════════
+# Pruebas de A4-12. Enviar primero los dos inicios de sesión (guardan el token).
+# Para ver el cambio tras vencer a un guardián: usar "Desafiar al guardián" de combate.http.
+@api = http://localhost:3000/api
+
+### Iniciar sesión con el demo
+# @name login
+POST {{api}}/acceso/iniciar-sesion
+Content-Type: application/json
+
+{ "correo": "demo@daemon504.hn", "contrasena": "demo1234" }
+
+### Iniciar sesión con la cuenta sin personaje
+# @name loginNuevo
+POST {{api}}/acceso/iniciar-sesion
+Content-Type: application/json
+
+{ "correo": "nuevo@daemon504.hn", "contrasena": "nuevo1234" }
+
+### Progreso del demo → 200 (siguiente: Montaña de la Tormenta, Sello del Bosque, guardián nivel 9)
+GET {{api}}/progreso
+Authorization: Bearer {{login.response.body.token}}
+
+### Enviar un personajeId ajeno no cambia la respuesta → 200 igual que la anterior
+GET {{api}}/progreso?personajeId=00000000-0000-4000-8000-000000000002
+Authorization: Bearer {{login.response.body.token}}
+
+### Usuario sin personaje → 404
+GET {{api}}/progreso
+Authorization: Bearer {{loginNuevo.response.body.token}}
+
+### Sin sesión → 401
+GET {{api}}/progreso
+
+### Solo con X-Usuario-Id → 401
+GET {{api}}/progreso
+X-Usuario-Id: 00000000-0000-4000-8000-000000000001
+
+### Cuenta nueva: registrar → 201
+# @name registro
+POST {{api}}/acceso/registro
+Content-Type: application/json
+
+{ "correo": "progreso{{$timestamp}}@daemon504.hn", "contrasena": "prueba1234" }
+
+### Cuenta nueva: crear personaje → 201 (si da 400, cambiar criaturaInicialId por una inicial del catálogo)
+POST {{api}}/personaje
+Authorization: Bearer {{registro.response.body.token}}
+Content-Type: application/json
+
+{ "nombre": "Prueba", "criaturaInicialId": 1 }
+
+### Cuenta nueva: progreso → 200 (siguiente: el guardián de la Pradera)
+GET {{api}}/progreso
+Authorization: Bearer {{registro.response.body.token}}
