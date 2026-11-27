@@ -36,13 +36,13 @@ function vistaZona(catalogo, zonaId, sellos, combatePendiente) {
     },
     destinos: zona.conexiones.map((id) => {
       const destino = buscarZona(catalogo, id);
+      const bloqueada = estaBloqueada(destino, sellos);
       return {
         id,
         nombre: destino.nombre,
         nivelMin: destino.nivelMin,
         nivelMax: destino.nivelMax,
-        bloqueada: estaBloqueada(destino, sellos),
-        requisito: destino.requiere && nombreSello(catalogo, destino.requiere),
+        requisito: bloqueada ? nombreSello(catalogo, destino.requiere) : null,
       };
     }),
     combatePendiente,
