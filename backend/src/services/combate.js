@@ -260,6 +260,7 @@ function vistaEncuentro(ctx) {
   return {
     id: ctx.encuentro.id,
     turno: ctx.encuentro.turno,
+    zonaId: ctx.personaje.zonaActual,
     esGuardian: Boolean(ctx.encuentro.guardianId),
     rival: ctx.rival,
     activa: ctx.activa.vista,
@@ -277,6 +278,7 @@ function vistaEncuentro(ctx) {
 export async function obtenerEncuentro(personajeId) {
   const encuentro = await encuentros.buscarPorPersonaje(pool, personajeId);
   if (!encuentro) return null;
+const personaje = await personajes.buscarPorId(pool, personajeId);
 
   const [catalogo, listaCriaturas, objetos] = await Promise.all([
     obtenerCatalogo(),
@@ -288,6 +290,7 @@ export async function obtenerEncuentro(personajeId) {
 
   const ctx = {
     personajeId,
+    personaje,
     catalogo,
     encuentro,
     activa: { vista: vistaCriatura(catalogo, activa) },
