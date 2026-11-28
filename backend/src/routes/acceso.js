@@ -1,8 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA TIENE QUE INTEGRAR: Genesis Medina
- * Tarea A4-01 · Rama: feature/a4-base · Fecha límite: miércoles 25 de noviembre
- * Commit: "feat(auth): endpoints de /api/acceso con sesión por token"
- * ═══════════════════════════════════════════════════════════════════ */
 // Rutas de /api/acceso. Registro, inicio y cierre son públicas; /sesion exige token.
 import { Router } from 'express';
 import * as c from '../controllers/acceso.js';
