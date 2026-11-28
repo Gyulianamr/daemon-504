@@ -1,0 +1,6 @@
+/* ═══════════════════════════════════════════════════════════════════
+ * ESTA PARTE LA TIENE QUE INTEGRAR: Dinora Padilla
+ * Tarea A4-08 · Rama: feature/a4-imagenes · Fecha límite: jueves 26 de noviembre
+ * Commit: "feat(imagenes): componente de imagen de criatura"
+ * ═══════════════════════════════════════════════════════════════════ */
+.imagen-criatura { display: block; width: 96px; height: 96px; margin: 0 auto; border-radius: var(--radio); background: var(--color-suave); object-fit: contain; }
