@@ -5,6 +5,7 @@
  * Commit: "feat(equipo): mostrar apodo y especie en la tarjeta"
  * ═══════════════════════════════════════════════════════════════════ */
 import BarraVida from './BarraVida.jsx';
+import ImagenCriatura from './ImagenCriatura.jsx';
 
 // Muestra una criatura del jugador o un rival. Se usa en Equipo y en Combate.
 // "children" permite agregar botones (por ejemplo "Hacer activa").
@@ -15,6 +16,7 @@ export default function TarjetaCriatura({ criatura, activa = false, children }) 
   const clases = ['tarjeta-criatura', activa && 'tarjeta-criatura--activa', debilitada && 'tarjeta-criatura--debilitada'].filter(Boolean).join(' ');
   return (
     <article className={clases}>
+      <ImagenCriatura id={criatura.criaturaId} nombre={criatura.especie ?? criatura.nombre} />
       <div className="tarjeta-criatura__encabezado">
         <div>
           <h3 className="tarjeta-criatura__nombre">
