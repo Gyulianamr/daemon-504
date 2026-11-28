@@ -120,7 +120,7 @@ CREATE TABLE eventos (
 
 -- ─────────────────────────────── PARTIDA ───────────────────────────────
 
--- Cada jugador. La contraseña se guarda cifrada (scrypt, "sal:hash"), nunca en texto plano.
+-- Cada jugador. La contraseña se guarda cifrada (bcrypt), nunca en texto plano.
 CREATE TABLE usuarios (
   id              UUID PRIMARY KEY,
   correo          TEXT NOT NULL UNIQUE,

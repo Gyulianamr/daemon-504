@@ -59,7 +59,7 @@ GET {{api}}/acceso/sesion
 GET {{api}}/personaje
 Authorization: Bearer {{token}}
 
-### 10. La misma ruta solo con X-Usuario-Id → 401 (ya no se acepta)
+### 10. La misma ruta sin token → 401
 GET {{api}}/personaje
 X-Usuario-Id: 00000000-0000-4000-8000-000000000001
 

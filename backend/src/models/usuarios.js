@@ -1,28 +1,21 @@
-/* ═══════════════════════════════════════════════════════════════════
- * ESTA PARTE LA TIENE QUE INTEGRAR: Genesis Medina
- * Tarea A4-01 · Rama: feature/a4-base · Fecha límite: miércoles 25 de noviembre
- * Commit: "feat(auth): registro, inicio y cierre de sesión con token"
- * ═══════════════════════════════════════════════════════════════════ */
-// Consultas de la tabla usuarios: buscar por id o por correo y crear la cuenta.
+// Modelo Sequelize de la tabla usuarios: una cuenta por correo, con la contraseña cifrada.
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../db/sequelize.js';
 
-export async function buscarPorId(db, id) {
-  const { rows } = await db.query('SELECT id, correo FROM usuarios WHERE id = $1', [id]);
-  return rows[0] ?? null;
-}
+export const Usuario = sequelize.define('Usuario', {
+  id: { type: DataTypes.UUID, primaryKey: true },
+  correo: { type: DataTypes.TEXT, allowNull: false, unique: true },
+  contrasenaHash: { type: DataTypes.TEXT, allowNull: false, field: 'contrasena_hash' },
+}, { tableName: 'usuarios', timestamps: false });
+
+export const buscarPorId = (id) =>
+  Usuario.findByPk(id, { attributes: ['id', 'correo'], raw: true });
 
 // Incluye el hash para poder verificar la contraseña; nunca se devuelve al navegador.
-export async function buscarPorCorreo(db, correo) {
-  const { rows } = await db.query(
-    'SELECT id, correo, contrasena_hash AS "contrasenaHash" FROM usuarios WHERE correo = $1',
-    [correo],
-  );
-  return rows[0] ?? null;
-}
+export const buscarPorCorreo = (correo, transaction) =>
+  Usuario.findOne({ where: { correo }, raw: true, transaction });
 
-export async function crear(db, { id, correo, contrasenaHash }) {
-  const { rows } = await db.query(
-    'INSERT INTO usuarios (id, correo, contrasena_hash) VALUES ($1, $2, $3) RETURNING id, correo',
-    [id, correo, contrasenaHash],
-  );
-  return rows[0];
+export async function crear({ id, correo, contrasenaHash }, transaction) {
+  const usuario = await Usuario.create({ id, correo, contrasenaHash }, { transaction });
+  return { id: usuario.id, correo: usuario.correo };
 }
