@@ -17,7 +17,7 @@ npm run dev                 # http://localhost:3000/api/salud
 
 | Endpoint | Qué hace |
 |---|---|
-| `POST /api/acceso/registro` | Crea la cuenta (contraseña cifrada con scrypt) y devuelve `{ usuario, token }` |
+| `POST /api/acceso/registro` | Crea la cuenta (contraseña cifrada con bcrypt) y devuelve `{ usuario, token }` |
 | `POST /api/acceso/iniciar-sesion` | Devuelve `{ usuario, token }` |
 | `GET /api/acceso/sesion` | Con token: devuelve `{ usuario }` |
 | `POST /api/acceso/cerrar-sesion` | Borra la sesión del servidor (204) |
